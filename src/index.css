@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #0F1420;
+  background-image:
+    linear-gradient(rgba(220, 215, 201, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(220, 215, 201, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: #DCD7C9;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: #7FB77E;
+  color: #0F1420;
+}
+
+:focus-visible {
+  outline: 2px solid #E8A33D;
+  outline-offset: 2px;
+}
+
+/* Scrollbar sutil, coherente con la paleta */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0F1420;
+}
+::-webkit-scrollbar-thumb {
+  background: #3D4759;
+  border-radius: 6px;
+}
