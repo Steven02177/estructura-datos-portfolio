@@ -46,6 +46,10 @@ Esos controles solo existen dentro de `/admin`, que exige sesión iniciada.
    **Unsigned**. Copia el nombre del preset.
 4. Nunca copies ni uses el **API Secret** — no hace falta con preset
    unsigned, y jamás debe ir en el frontend.
+5. **Para que también acepte documentos Word (.docx):** en la configuración
+   del preset revisa el campo **"Allowed formats"** — si está restringido
+   solo a imágenes, bórralo o agrega `docx`. Si lo dejas vacío, Cloudinary
+   acepta cualquier tipo de archivo.
 
 ## 4. Reglas de Firestore (obligatorio — protege los datos de verdad)
 
@@ -142,6 +146,19 @@ src/
     AdminLogin.jsx                → login
     AdminDashboard.jsx            → panel: tabla + crear/editar/eliminar
 ```
+
+## Documentos Word (.docx)
+
+Cada trabajo admite opcionalmente un archivo `.docx`. Se sube a Cloudinary
+como recurso "raw" (no imagen) y en la página de detalle se muestra
+**convertido a HTML directamente en el navegador** con la librería
+`mammoth` — el profesor lo lee ahí mismo, sin descargarlo ni abrirlo en
+Word/Google Docs. Si la conversión falla por algún motivo, se muestra un
+enlace de respaldo para abrir el archivo original.
+
+Limitación conocida: `mammoth` interpreta el texto, estilos y tablas del
+`.docx`, pero no reproduce diseño complejo (columnas, encabezados/pies de
+página, SmartArt). Para un documento de texto normal funciona muy bien.
 
 ## Nota de seguridad importante sobre Cloudinary
 

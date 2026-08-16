@@ -57,3 +57,48 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+/* Estilos para el HTML que genera mammoth al convertir un .docx */
+.word-preview h1, .word-preview h2, .word-preview h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  color: #0A0F1E;
+}
+.word-preview h1 { font-size: 1.5rem; }
+.word-preview h2 { font-size: 1.25rem; }
+.word-preview h3 { font-size: 1.1rem; }
+.word-preview p {
+  margin: 0.75em 0;
+  line-height: 1.7;
+}
+.word-preview ul, .word-preview ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+.word-preview li {
+  margin: 0.25em 0;
+}
+.word-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+.word-preview td, .word-preview th {
+  border: 1px solid #cbd5e1;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.word-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.75em 0;
+}
+.word-preview a {
+  color: #2563EB;
+  text-decoration: underline;
+}
+.word-preview strong { font-weight: 600; }

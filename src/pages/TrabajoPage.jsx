@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Layout from '../components/Layout.jsx'
 import CodeBlock from '../components/CodeBlock.jsx'
+import WordPreview from '../components/WordPreview.jsx'
 import { obtenerTrabajo, obtenerTrabajos } from '../firebase.js'
 
 function Seccion({ etiqueta, children }) {
@@ -114,6 +115,12 @@ export default function TrabajoPage() {
                     />
                   </div>
                 )}
+              </Seccion>
+            )}
+
+            {trabajo.documentoUrl && (
+              <Seccion etiqueta="Documento Word">
+                <WordPreview url={trabajo.documentoUrl} />
               </Seccion>
             )}
 

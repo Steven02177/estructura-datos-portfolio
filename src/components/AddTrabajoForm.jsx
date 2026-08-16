@@ -26,6 +26,7 @@ export default function AddTrabajoForm({ siguienteNumero, trabajoExistente, onCl
   const [form, setForm] = useState(estadoInicial(trabajoExistente, siguienteNumero))
   const [umlFile, setUmlFile] = useState(null)
   const [salidaFile, setSalidaFile] = useState(null)
+  const [docFile, setDocFile] = useState(null)
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
 
@@ -48,9 +49,9 @@ export default function AddTrabajoForm({ siguienteNumero, trabajoExistente, onCl
     try {
       const datos = { ...form, numeroClase: Number(form.numeroClase) }
       if (editando) {
-        await editarTrabajo(trabajoExistente.id, datos, { umlFile, salidaFile })
+        await editarTrabajo(trabajoExistente.id, datos, { umlFile, salidaFile, docFile })
       } else {
-        await crearTrabajo(datos, { umlFile, salidaFile })
+        await crearTrabajo(datos, { umlFile, salidaFile, docFile })
       }
       onGuardado()
     } catch (err) {
@@ -170,6 +171,21 @@ export default function AddTrabajoForm({ siguienteNumero, trabajoExistente, onCl
               onChange={(e) => setSalidaFile(e.target.files?.[0] ?? null)}
               className="w-full font-mono text-xs text-slate file:mr-3 file:rounded-lg file:border file:border-line file:bg-navy file:px-3 file:py-1.5 file:text-paper"
             />
+          </div>
+
+          <div>
+            <label className="mb-1 block font-mono text-xs text-slate">
+              documento Word .docx (opcional){editando && trabajoExistente.documentoUrl ? ' — deja vacío para no cambiarlo' : ''}
+            </label>
+            <input
+              type="file"
+              accept=".doc,.docx"
+              onChange={(e) => setDocFile(e.target.files?.[0] ?? null)}
+              className="w-full font-mono text-xs text-slate file:mr-3 file:rounded-lg file:border file:border-line file:bg-navy file:px-3 file:py-1.5 file:text-paper"
+            />
+            <p className="mt-1 font-mono text-[11px] text-slate/70">
+              se muestra directo en la página del trabajo, sin descargarlo
+            </p>
           </div>
 
           {error && (

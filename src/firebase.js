@@ -28,15 +28,7 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
-console.log("FIREBASE CHECK:", {
-  apiKey: firebaseConfig.apiKey
-    ? firebaseConfig.apiKey.substring(0, 10) + "..."
-    : "FALTA",
-  authDomain: firebaseConfig.authDomain,
-  projectId: firebaseConfig.projectId,
-  messagingSenderId: firebaseConfig.messagingSenderId,
-  appId: firebaseConfig.appId,
-})
+
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
 export const auth = getAuth(app)
@@ -112,6 +104,45 @@ export async function subirImagen(archivo) {
   return data.secure_url
 }
 
+/**
+ * Sube un documento (Word, PDF, etc.) a Cloudinary como recurso "raw" y
+ * devuelve su URL pública.
+ */
+export async function subirDocumento(archivo) {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    throw new Error(
+      'Faltan VITE_CLOUDINARY_CLOUD_NAME o VITE_CLOUDINARY_UPLOAD_PRESET en el .env'
+    )
+  }
+  const extensionesValidas = ['.doc', '.docx']
+  const nombre = archivo.name.toLowerCase()
+  if (!extensionesValidas.some((ext) => nombre.endsWith(ext))) {
+    throw new Error('El documento debe ser un archivo .doc o .docx.')
+  }
+  if (archivo.size > TAMANO_MAXIMO_MB * 1024 * 1024) {
+    throw new Error(`El documento no puede superar ${TAMANO_MAXIMO_MB} MB.`)
+  }
+
+  const formData = new FormData()
+  formData.append('file', archivo)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+  const urlRaw = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/raw/upload`
+  const respuesta = await fetch(urlRaw, { method: 'POST', body: formData })
+
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text().catch(() => '')
+    throw new Error(`Error al subir el documento a Cloudinary (${respuesta.status}): ${detalle}`)
+  }
+
+  const data = await respuesta.json()
+  if (!data.secure_url) {
+    throw new Error('Cloudinary no devolvió una URL válida para el documento.')
+  }
+
+  return data.secure_url
+}
+
 // ---------------------------------------------------------------------------
 // CRUD de trabajos (Firestore)
 // ---------------------------------------------------------------------------
@@ -126,6 +157,7 @@ export async function crearTrabajo(data, imagenes) {
     ...data,
     umlUrl: '',
     salidaImagenUrl: '',
+    documentoUrl: '',
     createdAt: serverTimestamp(),
   })
 
@@ -135,6 +167,9 @@ export async function crearTrabajo(data, imagenes) {
   }
   if (imagenes.salidaFile) {
     updates.salidaImagenUrl = await subirImagen(imagenes.salidaFile)
+  }
+  if (imagenes.docFile) {
+    updates.documentoUrl = await subirDocumento(imagenes.docFile)
   }
 
   if (Object.keys(updates).length > 0) {
@@ -155,6 +190,9 @@ export async function editarTrabajo(id, data, imagenes = {}) {
   }
   if (imagenes.salidaFile) {
     updates.salidaImagenUrl = await subirImagen(imagenes.salidaFile)
+  }
+  if (imagenes.docFile) {
+    updates.documentoUrl = await subirDocumento(imagenes.docFile)
   }
 
   await updateDoc(doc(db, TRABAJOS_COLLECTION, id), updates)

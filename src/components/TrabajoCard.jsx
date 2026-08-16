@@ -29,6 +29,11 @@ export default function TrabajoCard({ trabajo, index, siguienteTitulo }) {
           <span className="absolute left-3 top-3 rounded-full border border-line/70 bg-navy/70 px-2.5 py-1 font-mono text-[11px] text-blueLight backdrop-blur-sm">
             Nº {String(trabajo.numeroClase).padStart(2, '0')}
           </span>
+          {trabajo.documentoUrl && (
+            <span className="absolute right-3 top-3 rounded-full border border-line/70 bg-navy/70 px-2.5 py-1 font-mono text-[11px] text-cyan backdrop-blur-sm">
+              📄 Word
+            </span>
+          )}
         </div>
 
         <div className="flex flex-1 flex-col p-5">
