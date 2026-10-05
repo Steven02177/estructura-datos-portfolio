@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #0A0F1E;
+  color: #F8FAFC;
+  font-family: 'Inter', sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: #2563EB;
+  color: #F8FAFC;
+}
+
+:focus-visible {
+  outline: 2px solid #22D3EE;
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0F1E;
+}
+::-webkit-scrollbar-thumb {
+  background: #233047;
+  border-radius: 6px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Estilos para el HTML que genera mammoth al convertir un .docx */
+.word-preview h1, .word-preview h2, .word-preview h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  color: #0A0F1E;
+}
+.word-preview h1 { font-size: 1.5rem; }
+.word-preview h2 { font-size: 1.25rem; }
+.word-preview h3 { font-size: 1.1rem; }
+.word-preview p {
+  margin: 0.75em 0;
+  line-height: 1.7;
+}
+.word-preview ul, .word-preview ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+.word-preview li {
+  margin: 0.25em 0;
+}
+.word-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+.word-preview td, .word-preview th {
+  border: 1px solid #cbd5e1;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.word-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.75em 0;
+}
+.word-preview a {
+  color: #2563EB;
+  text-decoration: underline;
+}
+.word-preview strong { font-weight: 600; }
