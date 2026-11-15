@@ -1,0 +1,40 @@
+=== Lista doble inicial con 10 nodos ===
+  Adelante: 100 <-> 200 <-> 300 <-> 400 <-> 500 <-> 600 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 100)   [tamano = 10]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 600 <-> 500 <-> 400 <-> 300 <-> 200 <-> 100 <-> (ultimo 1000)
+
+--- Caso 1: eliminar nodo INTERMEDIO (posicion 6) ---
+Antes:
+  Adelante: 100 <-> 200 <-> 300 <-> 400 <-> 500 <-> 600 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 100)   [tamano = 10]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 600 <-> 500 <-> 400 <-> 300 <-> 200 <-> 100 <-> (ultimo 1000)
+Despues:
+  Adelante: 100 <-> 200 <-> 300 <-> 400 <-> 500 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 100)   [tamano = 9]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 500 <-> 400 <-> 300 <-> 200 <-> 100 <-> (ultimo 1000)
+
+--- Caso 2: eliminar la CABEZA (posicion 1) ---
+Antes:
+  Adelante: 100 <-> 200 <-> 300 <-> 400 <-> 500 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 100)   [tamano = 9]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 500 <-> 400 <-> 300 <-> 200 <-> 100 <-> (ultimo 1000)
+Despues:
+  Adelante: 200 <-> 300 <-> 400 <-> 500 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 200)   [tamano = 8]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 500 <-> 400 <-> 300 <-> 200 <-> (ultimo 1000)
+
+--- Caso 3: eliminar la COLA (posicion 8, la ultima) ---
+Antes:
+  Adelante: 200 <-> 300 <-> 400 <-> 500 <-> 700 <-> 800 <-> 900 <-> 1000 <-> (cabeza 200)   [tamano = 8]
+  Atras   : 1000 <-> 900 <-> 800 <-> 700 <-> 500 <-> 400 <-> 300 <-> 200 <-> (ultimo 1000)
+Despues:
+  Adelante: 200 <-> 300 <-> 400 <-> 500 <-> 700 <-> 800 <-> 900 <-> (cabeza 200)   [tamano = 7]
+  Atras   : 900 <-> 800 <-> 700 <-> 500 <-> 400 <-> 300 <-> 200 <-> (ultimo 900)
+
+--- Caso extra: posicion invalida (15) ---
+  [Aviso] La posicion 15 no existe (rango valido: 1 a 7).
+
+--- Caso extra: mantener el cierre con pocos elementos ---
+  Adelante: 1 <-> 2 <-> (cabeza 1)   [tamano = 2]
+  Atras   : 2 <-> 1 <-> (ultimo 2)
+Tras eliminar la posicion 1 (queda 1 nodo):
+  Adelante: 2 <-> (cabeza 2)   [tamano = 1]
+  Atras   : 2 <-> (ultimo 2)
+Tras eliminar la posicion 1 (lista vacia):
+  Lista vacia
+  [Aviso] La lista esta vacia: no hay nada que eliminar.

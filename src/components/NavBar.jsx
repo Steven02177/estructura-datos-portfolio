@@ -7,6 +7,7 @@ const enlaces = [
   { to: '/', label: 'Inicio', fin: true },
   { to: '/trabajos', label: 'Trabajos' },
   { to: '/parcial-2', label: 'Parcial 2' },
+  { to: '/parcial-3', label: 'Parcial 3' },
   { to: '/#sobre-el-proyecto', label: 'Sobre el proyecto' },
 ]
 

@@ -85,6 +85,12 @@ export default function Home() {
             >
               Parcial 2 · Ordenamientos
             </Link>
+            <Link
+              to="/parcial-3"
+              className="inline-flex items-center gap-2 rounded-full border border-blueLight/40 bg-blue/10 px-6 py-3.5 text-sm font-medium text-blueLight transition-colors hover:bg-blue/20"
+            >
+              Parcial 3 · Listas circulares
+            </Link>
           </motion.div>
         </div>
       </section>

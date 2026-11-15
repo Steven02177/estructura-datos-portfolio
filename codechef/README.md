@@ -15,3 +15,11 @@ Copia TODO el .java en CodeChef → lenguaje **Java** → Run.
 | 4_Repetidos_Nombres.java | 4. Con repeticiones — solo nombres (n=250) |
 | 5_MitadOrdenados_Numeros.java | 5. Medianamente ordenados — solo numeros (n=500) |
 | 5_MitadOrdenados_Nombres.java | 5. Medianamente ordenados — solo nombres (n=250) |
+
+Parcial 3 — listas circulares:
+
+| Archivo | Que es |
+|---------|--------|
+| 6_ListaCircularSimple.java | Ej. 3 — circular sencilla con eliminarEnPosicion (main con 10 nodos) |
+| 7_ListaCircularDoble.java | Ej. 4 — circular doble con eliminarEnPosicionDoble + mostrarLista en ambas direcciones |
+| 8_ActualizarNodo.java | Ej. 5 — actualizarValorEnPosicion y actualizarPorDato sin NullPointerException |

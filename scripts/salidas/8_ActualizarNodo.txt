@@ -1,0 +1,29 @@
+=== Estado inicial (6 nodos) ===
+  Adelante: 20 <-> 40 <-> 60 <-> 80 <-> 100 <-> 120 <-> (cabeza 20)   [tamano = 6]
+  Atras   : 120 <-> 100 <-> 80 <-> 60 <-> 40 <-> 20 <-> (ultimo 120)
+
+--- Actualizar por POSICION (posicion 3 -> 777) ---
+Antes:
+  Adelante: 20 <-> 40 <-> 60 <-> 80 <-> 100 <-> 120 <-> (cabeza 20)   [tamano = 6]
+  Atras   : 120 <-> 100 <-> 80 <-> 60 <-> 40 <-> 20 <-> (ultimo 120)
+  [OK] Posicion 3: 60 -> 777
+Despues:
+  Adelante: 20 <-> 40 <-> 777 <-> 80 <-> 100 <-> 120 <-> (cabeza 20)   [tamano = 6]
+  Atras   : 120 <-> 100 <-> 80 <-> 777 <-> 40 <-> 20 <-> (ultimo 120)
+
+--- Actualizar por DATO (100 -> 999) ---
+Antes:
+  Adelante: 20 <-> 40 <-> 777 <-> 80 <-> 100 <-> 120 <-> (cabeza 20)   [tamano = 6]
+  Atras   : 120 <-> 100 <-> 80 <-> 777 <-> 40 <-> 20 <-> (ultimo 120)
+  [OK] Dato 100 -> 999
+Despues:
+  Adelante: 20 <-> 40 <-> 777 <-> 80 <-> 999 <-> 120 <-> (cabeza 20)   [tamano = 6]
+  Atras   : 120 <-> 999 <-> 80 <-> 777 <-> 40 <-> 20 <-> (ultimo 120)
+
+--- Casos controlados (sin excepciones) ---
+  [Aviso] La posicion 15 no existe (rango valido: 1 a 6).
+  [Aviso] El dato 1234 no existe en la lista.
+
+--- Lista vacia ---
+  [Aviso] La lista esta vacia: no hay nada que actualizar.
+  [Aviso] La lista esta vacia: no hay nada que actualizar.

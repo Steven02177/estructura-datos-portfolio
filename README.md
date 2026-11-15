@@ -13,6 +13,9 @@ Stack: **React + Vite + Tailwind + React Router + Framer Motion + Firebase
 - **`/`** — portada (landing).
 - **`/trabajos`** — cuadrícula pública de todos los trabajos. Solo lectura.
 - **`/trabajos/:id`** — detalle de un trabajo. Solo lectura.
+- **`/parcial-2`** — examen del 2º corte: comparativa visual de ordenamientos.
+- **`/parcial-3`** — examen del 3er corte: listas circulares (simulador de punteros,
+  respuestas teóricas y código Java con salida real).
 - **`/admin/login`** — inicio de sesión del administrador.
 - **`/admin`** — panel protegido: crear, editar y eliminar trabajos.
 
@@ -140,12 +143,22 @@ src/
     CodeBlock.jsx               → bloque de código con numeración
     AddTrabajoForm.jsx          → formulario, sirve para crear y editar
     SortingVisualizer.jsx       → simulador interactivo de métodos de ordenamiento
+    ParcialVisualizer.jsx       → simulador de ordenamientos del Parcial 2
+    CircularListVisualizer.jsx  → simulador de listas circulares del Parcial 3
   pages/
     Home.jsx                    → portada
     Trabajos.jsx                 → cuadrícula pública
     TrabajoPage.jsx               → detalle de un trabajo
     AdminLogin.jsx                → login
     AdminDashboard.jsx            → panel: tabla + crear/editar/eliminar
+    Parcial2.jsx                  → examen 2º corte (/parcial-2)
+    Parcial3.jsx                  → examen 3er corte (/parcial-3)
+  data/
+    listasCirculares.js         → GENERADO: código Java + salidas del Parcial 3
+scripts/
+  gen-codechef.mjs              → genera los .java del Parcial 2
+  gen-parcial3.mjs              → genera src/data/listasCirculares.js
+  salidas/                      → salida real (JDK 17) de los .java del Parcial 3
 ```
 
 ## Representación visual de ordenamiento (2º corte)
@@ -163,6 +176,44 @@ simulador interactivo con:
 
 El método se preselecciona automáticamente según el título del trabajo cuando
 es posible. El profesor puede cambiar datos y método al momento de revisar.
+
+## Listas circulares (3er corte)
+
+La ruta **`/parcial-3`** contiene la entrega del examen del tercer parcial:
+
+- **Respuestas teóricas** de los enunciados 1 y 2 (diferencias de eliminación
+  entre lista circular sencilla y doble; qué parte de la actualización depende
+  de la estructura y qué parte es independiente de los punteros), con tablas
+  comparativas.
+- **`CircularListVisualizer`**: simulador interactivo que dibuja la lista sobre
+  una circunferencia (flechas `siguiente` y, en la doble, `anterior`), anima el
+  recorrido hasta el nodo objetivo, muestra las ecuaciones de punteros que aplica
+  cada operación (insertar, `eliminarEnPosicion`, `actualizarValorEnPosicion`,
+  `actualizarPorDato`) y valida los casos fuera de rango con avisos controlados.
+  Usa los mismos datos iniciales que los `main` de Java (1..10 y 100..1000).
+- **Código Java** de los ejercicios 3, 4 y 5 con botón de copiar (listo para
+  pegar en CodeChef) y su **salida real de ejecución**.
+
+### Código Java del Parcial 3
+
+Están en `codechef/` (independientes entre sí, uno por ejercicio):
+
+| Archivo | Ejercicio |
+|---------|-----------|
+| `6_ListaCircularSimple.java` | 3 — `eliminarEnPosicion` |
+| `7_ListaCircularDoble.java` | 4 — `eliminarEnPosicionDoble` + `mostrarLista` |
+| `8_ActualizarNodo.java` | 5 — `actualizarValorEnPosicion` / `actualizarPorDato` |
+
+El archivo `src/data/listasCirculares.js` (código + salidas) **está generado**;
+para regenerarlo después de tocar un `.java` o una salida:
+
+```bash
+node scripts/gen-parcial3.mjs
+```
+
+Las salidas reales viven en `scripts/salidas/*.txt` (compilado y ejecutado con
+JDK 17). Si cambias un `.java`, recompila y reescribe su `.txt` antes de
+regenerar el módulo.
 
 ## Documentos Word (.docx)
 

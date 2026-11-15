@@ -1,0 +1,27 @@
+=== Lista inicial con 10 nodos ===
+  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 1)   [tamano = 10]
+
+--- Caso 1: eliminar nodo INTERMEDIO (posicion 5) ---
+Antes:
+  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 1)   [tamano = 10]
+Despues:
+  1 -> 2 -> 3 -> 4 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 1)   [tamano = 9]
+
+--- Caso 2: eliminar la CABEZA (posicion 1) ---
+Antes:
+  1 -> 2 -> 3 -> 4 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 1)   [tamano = 9]
+Despues:
+  2 -> 3 -> 4 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 2)   [tamano = 8]
+
+--- Caso 3: eliminar la COLA (posicion 8, la ultima) ---
+Antes:
+  2 -> 3 -> 4 -> 6 -> 7 -> 8 -> 9 -> 10 -> (regresa a 2)   [tamano = 8]
+Despues:
+  2 -> 3 -> 4 -> 6 -> 7 -> 8 -> 9 -> (regresa a 2)   [tamano = 7]
+
+--- Caso extra: posicion invalida (20) ---
+  [Aviso] La posicion 20 no existe (rango valido: 1 a 7).
+
+--- Caso extra: vaciar la lista de a uno ---
+  [Aviso] La lista esta vacia: no hay nada que eliminar.
+  Lista vacia

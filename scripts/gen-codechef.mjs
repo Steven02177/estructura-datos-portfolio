@@ -577,5 +577,15 @@ for (const s of scenarios) {
   console.log('OK', fileNum, s.numeros.length, '|', fileNom, s.nombres.length)
 }
 
+// Parcial 3 (escritos a mano, se listan aquí para no perderlos al regenerar)
+lines.push('')
+lines.push('Parcial 3 — listas circulares:')
+lines.push('')
+lines.push('| Archivo | Que es |')
+lines.push('|---------|--------|')
+lines.push('| 6_ListaCircularSimple.java | Ej. 3 — circular sencilla con eliminarEnPosicion (main con 10 nodos) |')
+lines.push('| 7_ListaCircularDoble.java | Ej. 4 — circular doble con eliminarEnPosicionDoble + mostrarLista en ambas direcciones |')
+lines.push('| 8_ActualizarNodo.java | Ej. 5 — actualizarValorEnPosicion y actualizarPorDato sin NullPointerException |')
+
 fs.writeFileSync(path.join(outDir, 'README.md'), lines.join('\n'))
 console.log('DONE →', outDir)

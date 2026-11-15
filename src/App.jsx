@@ -7,6 +7,7 @@ import TrabajoPage from './pages/TrabajoPage.jsx'
 import AdminLogin from './pages/AdminLogin.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
 import Parcial2 from './pages/Parcial2.jsx'
+import Parcial3 from './pages/Parcial3.jsx'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/trabajos" element={<Trabajos />} />
         <Route path="/trabajos/:id" element={<TrabajoPage />} />
         <Route path="/parcial-2" element={<Parcial2 />} />
+        <Route path="/parcial-3" element={<Parcial3 />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin"
