@@ -1,0 +1,8 @@
+--- BÚSQUEDA EN EL HASHSET ---
+El estudiante existe en la lista: 
+[EST005] Luis Hernández
+
+--- INTENTO DE INSERCIÓN DE DUPLICADO ---
+¿Se pudo insertar el código repetido [EST005]?: false
+______________________________________________________
+| Cantidad total de estudiantes únicos registrados: 20 |

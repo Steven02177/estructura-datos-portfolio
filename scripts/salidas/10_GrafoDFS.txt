@@ -1,0 +1,22 @@
+--- ESTRUCTURA DE LA RED (LISTA DE ADYACENCIA) ---
+Nodo Bruno -> Conectado con: [Ana, Diego, Elena]
+Nodo Carla -> Conectado con: [Ana, Diego, Elena]
+Nodo Ana -> Conectado con: [Bruno, Carla]
+Nodo Diego -> Conectado con: [Bruno, Carla, Fabián]
+Nodo Fabián -> Conectado con: [Diego, Elena, Gabriela]
+Nodo Gabriela -> Conectado con: [Fabián]
+Nodo Elena -> Conectado con: [Carla, Fabián, Bruno]
+
+--- RECORRIDO EN PROFUNDIDAD (DFS) desde [Ana] ---
+Visitando: Ana   | Pila: []   | Visitados: [Ana]
+Visitando: Bruno   | Pila: [Carla]   | Visitados: [Bruno, Ana]
+Visitando: Diego   | Pila: [Carla, Elena]   | Visitados: [Bruno, Ana, Diego]
+Visitando: Carla   | Pila: [Carla, Elena, Fabián]   | Visitados: [Bruno, Carla, Ana, Diego]
+Visitando: Elena   | Pila: [Carla, Elena, Fabián]   | Visitados: [Bruno, Carla, Ana, Diego, Elena]
+Visitando: Fabián   | Pila: [Carla, Elena, Fabián]   | Visitados: [Bruno, Carla, Ana, Diego, Fabián, Elena]
+Visitando: Gabriela   | Pila: [Carla, Elena, Fabián]   | Visitados: [Bruno, Carla, Ana, Diego, Fabián, Gabriela, Elena]
+
+Secuencia DFS desde [Ana]: [Ana, Bruno, Diego, Carla, Elena, Fabián, Gabriela]
+Total de vertices visitados: 7
+______________________________________________________
+| Vertices: 7 | Aristas: 9 | Recorrido completo: Si |

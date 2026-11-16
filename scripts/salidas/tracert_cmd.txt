@@ -1,0 +1,12 @@
+C:\Users\USER> tracert -d -h 12 -w 800 www.google.com
+
+Traza a la dirección www.google.com [142.251.154.119]
+sobre un máximo de 12 saltos:
+
+  1     1 ms     1 ms     1 ms  192.168.1.1
+  2     5 ms     3 ms     3 ms  190.96.224.1
+  3     *        *        *     Tiempo de espera agotado para esta solicitud.
+  4    21 ms    21 ms    20 ms  72.14.213.234
+  5     9 ms    11 ms     8 ms  142.251.154.119
+
+Traza completa.

@@ -91,6 +91,18 @@ export default function Home() {
             >
               Parcial 3 · Listas circulares
             </Link>
+            <Link
+              to="/taller-hash"
+              className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-6 py-3.5 text-sm font-medium text-cyan transition-colors hover:bg-cyan/20"
+            >
+              Taller · HashMap vs HashSet
+            </Link>
+            <Link
+              to="/taller-grafos"
+              className="inline-flex items-center gap-2 rounded-full border border-blueLight/40 bg-blue/10 px-6 py-3.5 text-sm font-medium text-blueLight transition-colors hover:bg-blue/20"
+            >
+              Taller · Grafos
+            </Link>
           </motion.div>
         </div>
       </section>

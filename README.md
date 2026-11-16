@@ -215,6 +215,70 @@ Las salidas reales viven en `scripts/salidas/*.txt` (compilado y ejecutado con
 JDK 17). Si cambias un `.java`, recompila y reescribe su `.txt` antes de
 regenerar el módulo.
 
+## Talleres: Hash y Grafos (clases 9 y 10)
+
+Dos rutas nuevas contienen los dos talleres prácticos del semestre, cada uno
+como trabajo independiente con su propia navegación interna:
+
+### `/taller-hash` — HashMap vs HashSet
+
+- **Marco teórico**: función hash y buckets, definición formal de `HashMap` y
+  `HashSet`, complejidad temporal (O(1) promedio y degradación a O(n) con el
+  treeify de Java 8), colisiones y el contrato `equals()`/`hashCode()`, más el
+  cuadro comparativo pedido en el Word.
+- **`HashVisualizer`**: simulador que calcula el `hashCode()` real de Java
+  (`h = 31·h + c`), el índice real de Java 8 (`(h ^ (h >>> 16)) & (n - 1)`) y
+  dibuja los 16 buckets con colisiones encadenadas; alterna modo `HashMap`
+  (llave → valor) y `HashSet` (elementos únicos con `add()` rechazando
+  duplicados).
+- **Ejemplos guía** (`Parte 2`) y **ejercicios 3.1 y 3.2** con código, botón de
+  copiar y salida real de ejecución.
+
+### `/taller-grafos` — Taller práctico: Grafos
+
+- **Marco teórico** (Parte 1 del Word): G = (V, E), dirigido/no dirigido,
+  ponderado, lista vs matriz de adyacencia, tabla de complejidad espacial y
+  temporal, BFS (cola + `HashSet`) y DFS (pila) con pseudocódigo.
+- **`GrafoVisualizer`**: cuatro grafos reales del taller (campus con BFS, red
+  social con DFS, transferencias dirigidas y la traza `tracert`), recorrido paso
+  a paso, lista/matriz de adyacencia con grados y consulta de
+  `existeCaminoDirecto`.
+- **Parte 2** (análisis de `Grafos.java`), **ejercicios 3.1 y 3.2** y la **traza
+  CMD real** (`tracert -d -h 12 -w 800 www.google.com`), todos con salida real.
+
+### Código Java de los talleres
+
+Están en `codechef/` (además de los códigos guía, que viven en
+`scripts/fuentes/`):
+
+| Archivo | Taller / ejercicio |
+|---------|--------------------|
+| `9_MainHashMap.java` | Hash 3.1 — calificaciones con `HashMap` |
+| `9_MainHashSet.java` | Hash 3.2 — correos únicos con `HashSet` |
+| `Grafos.java` | Grafos Parte 2 — ejemplo guía `GrafoRed`/`MainGrafo` (BFS) |
+| `10_GrafoDFS.java` | Grafos 3.1 — DFS con `Stack` (7 vértices, 9 aristas) |
+| `11_GrafoDirigido.java` | Grafos 3.2 — `GrafoDirigido` + `existeCaminoDirecto` |
+| `12_TracertGrafo.java` | Grafos — traza `tracert` como grafo dirigido |
+
+`src/data/tallerHash.js` y `src/data/tallerGrafos.js` **están generados**;
+para regenerarlos después de tocar un `.java` o una salida:
+
+```bash
+node scripts/gen-talleres.mjs
+```
+
+### Integración con el panel administrativo
+
+El formulario «nuevo/editar trabajo» incluye el campo **página especial**
+(`paginaEspecial`: `'' | 'hash' | 'grafos'`):
+
+- La tarjeta del trabajo en `/trabajos` enlaza a la página completa del taller.
+- Las capturas (imagen de salida), el diagrama UML y el Word que adjuntes en
+  ese trabajo aparecen en la sección **Evidencias** del taller correspondiente.
+- Los trabajos antiguos sin el campo siguen funcionando igual (ficha estándar).
+
+No rompe registros previos: el campo es opcional y con valor por defecto `''`.
+
 ## Documentos Word (.docx)
 
 Cada trabajo admite opcionalmente un archivo `.docx`. Se sube a Cloudinary

@@ -1,0 +1,14 @@
+===== REGISTRO DE CORREOS PARA UN EVENTO =====
+
+--- REGISTRO DE ASISTENTES ---
+Camila Rojas <camila@gmail.com>
+Andrés Pérez <andres@gmail.com>
+Sofía Martínez <sofia@gmail.com>
+Laura Gómez <laura@gmail.com>
+Daniel Torres <daniel@gmail.com>
+
+--- INTENTOS DE REGISTRO DUPLICADO ---
+¿Se agregó LAURA@gmail.com?: false
+¿Se agregó camila@gmail.com?: false
+
+Total de correos únicos registrados: 5

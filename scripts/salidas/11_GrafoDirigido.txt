@@ -1,0 +1,14 @@
+--- TRANSFERENCIAS REGISTRADAS (LISTA DE ADYACENCIA DIRIGIDA) ---
+Cuenta Camila transfiere a: [Sofía]
+Cuenta Laura transfiere a: [Andrés, Camila]
+Cuenta Daniel transfiere a: [Miguel]
+Cuenta Sofía transfiere a: [Miguel]
+Cuenta Miguel transfiere a: [Laura]
+Cuenta Andrés transfiere a: [Daniel]
+
+--- CONSULTAS DE TRANSFERENCIA DIRECTA ---
+¿Existe transferencia directa Laura -> Andrés?: true
+¿Existe transferencia directa Sofía -> Laura?: false
+______________________________________________________
+| Cuentas: 6 | Transferencias dirigidas: 7 |
+| Camino directo Laura->Andrés: true | Camino directo Sofía->Laura: false |

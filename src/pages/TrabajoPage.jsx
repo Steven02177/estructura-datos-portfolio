@@ -6,6 +6,7 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import WordPreview from '../components/WordPreview.jsx'
 import SortingVisualizer from '../components/SortingVisualizer.jsx'
 import { obtenerTrabajo, obtenerTrabajos } from '../firebase.js'
+import { rutaDeTrabajo } from '../components/Contenido.jsx'
 
 function Seccion({ etiqueta, children }) {
   return (
@@ -80,6 +81,15 @@ export default function TrabajoPage() {
               <p className="mt-4 max-w-2xl leading-relaxed text-slate">
                 {trabajo.descripcion}
               </p>
+            )}
+
+            {trabajo.paginaEspecial && (
+              <Link
+                to={rutaDeTrabajo(trabajo)}
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-5 py-2 text-sm font-medium text-cyan transition-colors hover:bg-cyan/20"
+              >
+                Este trabajo es un taller completo: abrir su página →
+              </Link>
             )}
 
             {trabajo.umlUrl && (

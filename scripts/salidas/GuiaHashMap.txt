@@ -1,0 +1,9 @@
+--- BÚSQUEDA EN LA TABLA HASH ---
+Producto encontrado para el codigo [PROD002]: 
+Procesador Intel Core i7 12700K ($1650000.0)
+
+--- MODIFICACIÓN POR LLAVE ---
+Nuevo valor de PROD003: 
+Mouse Logic GT Master ($90000.0)
+______________________________________________________
+| Cantidad de productos cargados en el inventario: 20 |

@@ -1,0 +1,12 @@
+--- TOPOLOGÍA DE LA RED (LISTA DE ADYACENCIA) ---
+Nodo Biblioteca -> Conectado con: [Rectoría, Auditorio]
+Nodo Laboratorios -> Conectado con: [Ingeniería, Cafetería]
+Nodo Rectoría -> Conectado con: [Ingeniería, Biblioteca]
+Nodo Auditorio -> Conectado con: [Biblioteca, Cafetería]
+Nodo Cafetería -> Conectado con: [Laboratorios, Auditorio]
+Nodo Ingeniería -> Conectado con: [Rectoría, Laboratorios]
+
+--- RECORRIDO EN ANCHURA (BFS) desde [Rectoría] ---
+Rectoría Ingeniería Biblioteca Laboratorios Auditorio Cafetería 
+______________________________________________________
+| Total de vértices (nodos) en la red: 6 |

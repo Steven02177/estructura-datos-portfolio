@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { rutaDeTrabajo } from '../components/Contenido.jsx'
 
 export default function TrabajoCard({ trabajo, index, siguienteTitulo }) {
   return (
@@ -10,7 +11,7 @@ export default function TrabajoCard({ trabajo, index, siguienteTitulo }) {
       transition={{ duration: 0.5, delay: (index % 6) * 0.06, ease: 'easeOut' }}
     >
       <Link
-        to={`/trabajos/${trabajo.id}`}
+        to={rutaDeTrabajo(trabajo)}
         className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line/60 bg-panel/40 transition-all duration-300 hover:-translate-y-1 hover:border-blue/50 hover:shadow-[0_16px_40px_-16px_rgba(37,99,235,0.35)]"
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-panel2">

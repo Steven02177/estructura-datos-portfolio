@@ -7,6 +7,7 @@ function estadoInicial(trabajoExistente, siguienteNumero) {
       titulo: trabajoExistente.titulo || '',
       numeroClase: trabajoExistente.numeroClase ?? '',
       fecha: trabajoExistente.fecha || '',
+      paginaEspecial: trabajoExistente.paginaEspecial || '',
       descripcion: trabajoExistente.descripcion || '',
       codigo: trabajoExistente.codigo || '',
       salidaTexto: trabajoExistente.salidaTexto || '',
@@ -18,6 +19,7 @@ function estadoInicial(trabajoExistente, siguienteNumero) {
     titulo: '',
     numeroClase: siguienteNumero,
     fecha: '',
+    paginaEspecial: '',
     descripcion: '',
     codigo: '',
     salidaTexto: '',
@@ -118,6 +120,26 @@ export default function AddTrabajoForm({ siguienteNumero, trabajoExistente, onCl
               onChange={(e) => actualizar('fecha', e.target.value)}
               className="w-full rounded-lg border border-line bg-navy px-3 py-2 text-sm text-paper outline-none focus:border-blue sm:w-52"
             />
+          </div>
+
+          <div>
+            <label className="mb-1 block font-mono text-xs text-slate">
+              página especial (vincular con una sección del portafolio)
+            </label>
+            <select
+              value={form.paginaEspecial}
+              onChange={(e) => actualizar('paginaEspecial', e.target.value)}
+              className="w-full rounded-lg border border-line bg-navy px-3 py-2 text-sm text-paper outline-none focus:border-blue"
+            >
+              <option value="">Ninguna — ficha estándar en /trabajos/id</option>
+              <option value="hash">Taller HashMap vs HashSet → /taller-hash</option>
+              <option value="grafos">Taller de Grafos → /taller-grafos</option>
+            </select>
+            <p className="mt-1 font-mono text-[11px] text-slate/70">
+              Si eliges un taller, la tarjeta en «Trabajos» abrirá su página completa y las
+              capturas, diagramas y Word de ESTE trabajo se mostrarán en la sección «Evidencias»
+              de ese taller.
+            </p>
           </div>
 
           <div>

@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout.jsx'
-import CodeBlock from '../components/CodeBlock.jsx'
+import CodigoConSalida from '../components/CodigoConSalida.jsx'
 import CircularListVisualizer from '../components/CircularListVisualizer.jsx'
+import { C, Dato, Enunciado, Titulo, Tabla, Seccion, IndiceNav } from '../components/Contenido.jsx'
 import {
   CODIGO_SIMPLE,
   SALIDA_SIMPLE,
@@ -26,142 +26,8 @@ const INDICE = [
 ]
 
 // ---------------------------------------------------------------------------
-// Auxiliares de presentación (definidos fuera del componente principal)
+// Auxiliares de presentación: importados desde ../components/Contenido.jsx
 // ---------------------------------------------------------------------------
-
-/** Código en línea dentro de respuestas y tablas. */
-function C({ children }) {
-  return (
-    <code className="rounded bg-navy/70 px-1 py-0.5 font-mono text-[11px] text-cyan">
-      {children}
-    </code>
-  )
-}
-
-function Dato({ etiqueta, valor }) {
-  return (
-    <div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-slate">{etiqueta}</p>
-      <p className="mt-1 text-sm leading-relaxed text-paper">{valor}</p>
-    </div>
-  )
-}
-
-function Enunciado({ children }) {
-  return (
-    <div className="mt-4 rounded-xl border border-line/60 bg-panel/30 p-4">
-      <p className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-blueLight">
-        Enunciado
-      </p>
-      <p className="text-sm leading-relaxed text-slate">{children}</p>
-    </div>
-  )
-}
-
-function Titulo({ children }) {
-  return (
-    <p className="mt-6 font-mono text-[11px] uppercase tracking-widest text-cyan">{children}</p>
-  )
-}
-
-function Tabla({ columnas, filas }) {
-  return (
-    <div className="mt-4 overflow-x-auto rounded-xl border border-line/60 shadow-lg shadow-navy/40">
-      <table className="w-full min-w-[640px] text-left text-xs">
-        <thead>
-          <tr className="bg-navy text-[10px] uppercase tracking-wider text-slate">
-            {columnas.map((c) => (
-              <th key={c} className="px-3 py-3 font-mono font-medium">
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filas.map((f, i) => (
-            <tr
-              key={i}
-              className={`border-t border-line/40 ${i % 2 === 0 ? 'bg-panel/30' : 'bg-panel/10'}`}
-            >
-              {f.map((celda, j) => (
-                <td
-                  key={j}
-                  className={`px-3 py-2.5 align-top leading-relaxed ${
-                    j === 0 ? 'font-mono text-paper' : 'text-slate'
-                  }`}
-                >
-                  {celda}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
-function Seccion({ id, numero, titulo, children }) {
-  return (
-    <section id={id} className="mt-16 scroll-mt-24">
-      <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-blue/50 bg-blue/10 font-mono text-sm text-blueLight">
-          {numero}
-        </span>
-        <h2 className="text-balance font-display text-2xl font-semibold text-paper md:text-3xl">
-          {titulo}
-        </h2>
-      </div>
-      {children}
-    </section>
-  )
-}
-
-function CodigoConSalida({ archivo, codigo, salida }) {
-  const [copiado, setCopiado] = useState(false)
-
-  async function copiar() {
-    try {
-      await navigator.clipboard.writeText(codigo)
-      setCopiado(true)
-      setTimeout(() => setCopiado(false), 2500)
-    } catch {
-      setCopiado(false)
-    }
-  }
-
-  return (
-    <div className="mt-5 space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-xs text-cyan">{archivo}</p>
-        <button
-          type="button"
-          onClick={copiar}
-          className="rounded-full border border-cyan/40 bg-cyan/10 px-4 py-1.5 text-xs font-medium text-cyan transition-colors hover:bg-cyan/20"
-        >
-          {copiado ? '✓ Copiado — pega en CodeChef' : 'Copiar código (CodeChef)'}
-        </button>
-      </div>
-
-      <CodeBlock codigo={codigo} />
-
-      <div>
-        <p className="mb-2 font-mono text-[11px] uppercase tracking-widest text-slate">
-          Salida de la ejecución
-        </p>
-        <div className="rounded-xl border border-cyan/30 bg-navy p-4 shadow-lg shadow-navy/40">
-          <pre className="overflow-x-auto font-mono text-[12px] leading-relaxed text-cyan">
-            {salida}
-          </pre>
-        </div>
-        <p className="mt-2 font-mono text-[10px] text-slate/60">
-          Salida real: código compilado y ejecutado con JDK 17 ·{' '}
-          <span className="text-slate/80">{archivo}</span>
-        </p>
-      </div>
-    </div>
-  )
-}
 
 // ---------------------------------------------------------------------------
 // Página del Parcial 3
@@ -206,18 +72,7 @@ export default function Parcial3() {
           </div>
 
           {/* Índice */}
-          <nav className="mt-8 flex flex-wrap gap-2">
-            {INDICE.map((e) => (
-              <a
-                key={e.id}
-                href={`#${e.id}`}
-                className="rounded-full border border-line/60 bg-panel/40 px-4 py-1.5 text-xs text-slate transition-colors hover:border-blue/40 hover:text-paper"
-              >
-                <span className="mr-1.5 font-mono text-blueLight">{e.n}</span>
-                {e.titulo}
-              </a>
-            ))}
-          </nav>
+          <IndiceNav items={INDICE} />
 
           {/* ---------------------------------------------------------------
               Simulador interactivo (cubre los ejercicios 3, 4 y 5)

@@ -1,0 +1,16 @@
+===== SISTEMA DE GESTIÓN DE CALIFICACIONES =====
+
+--- REGISTROS INICIALES ---
+Matrícula: UDES005 | Nombre: Sofía Martínez | Nota: 4,7
+Matrícula: UDES003 | Nombre: Camila Rojas | Nota: 4,2
+Matrícula: UDES004 | Nombre: Daniel Torres | Nota: 3,5
+Matrícula: UDES001 | Nombre: Laura Gómez | Nota: 4,5
+Matrícula: UDES002 | Nombre: Andrés Pérez | Nota: 3,8
+
+--- CONSULTA DE ESTUDIANTE ---
+Registro encontrado: Matrícula: UDES003 | Nombre: Camila Rojas | Nota: 4,2
+
+--- ACTUALIZACIÓN DE CALIFICACIÓN ---
+Registro actualizado: Matrícula: UDES003 | Nombre: Camila Rojas | Nota: 4,8
+
+Total de estudiantes registrados: 5

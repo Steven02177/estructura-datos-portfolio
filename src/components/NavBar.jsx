@@ -6,6 +6,8 @@ import { cerrarSesion } from '../firebase.js'
 const enlaces = [
   { to: '/', label: 'Inicio', fin: true },
   { to: '/trabajos', label: 'Trabajos' },
+  { to: '/taller-hash', label: 'Hash' },
+  { to: '/taller-grafos', label: 'Grafos' },
   { to: '/parcial-2', label: 'Parcial 2' },
   { to: '/parcial-3', label: 'Parcial 3' },
   { to: '/#sobre-el-proyecto', label: 'Sobre el proyecto' },
@@ -34,7 +36,7 @@ export default function NavBar() {
           Keyner<span className="text-blueLight">.</span>ed
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
           {enlaces.map((e) => (
             <NavLink key={e.to} to={e.to} end={e.fin} className={linkClasses}>
               {e.label}
@@ -67,7 +69,7 @@ export default function NavBar() {
 
         <button
           onClick={() => setAbierto((v) => !v)}
-          className="flex flex-col gap-1.5 md:hidden"
+          className="flex flex-col gap-1.5 lg:hidden"
           aria-label={abierto ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={abierto}
         >
@@ -78,7 +80,7 @@ export default function NavBar() {
       </div>
 
       {abierto && (
-        <nav className="flex flex-col gap-1 border-t border-line/60 bg-navy px-6 py-4 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-line/60 bg-navy px-6 py-4 lg:hidden">
           {enlaces.map((e) => (
             <NavLink
               key={e.to}

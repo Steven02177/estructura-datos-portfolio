@@ -1,0 +1,13 @@
+--- TRAZA COMO GRAFO DIRIGIDO (LISTA DE ADYACENCIA) ---
+Nodo Mi equipo -> [192.168.1.1]
+Nodo 192.168.1.1 -> [190.96.224.1]
+Nodo 190.96.224.1 -> [3: * (tiempo de espera)]
+Nodo 3: * (tiempo de espera) -> [72.14.213.234]
+Nodo 72.14.213.234 -> [142.251.154.119]
+Nodo 142.251.154.119 -> [www.google.com]
+Nodo www.google.com -> (destino final de la traza)
+
+--- CAMINO RESULTANTE ---
+Mi equipo -> 192.168.1.1 -> 190.96.224.1 -> 3: * (tiempo de espera) -> 72.14.213.234 -> 142.251.154.119 -> www.google.com
+______________________________________________________
+| Saltos de la traza: 5 | Vertices del grafo: 7 | Aristas dirigidas: 6 |
