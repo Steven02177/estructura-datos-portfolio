@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Simulador interactivo de Pilas (LIFO), Colas (FIFO) y Torre de Hanói con códigos Java y salidas paso a paso.">
+<title>Teoría de Pilas y Colas · Simulador Interactivo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1320'/%3E%3Crect x='7' y='19' width='18' height='5' rx='1.5' fill='%2322c55e'/%3E%3Crect x='7' y='13' width='18' height='5' rx='1.5' fill='%233b82f6'/%3E%3Crect x='7' y='7' width='18' height='5' rx='1.5' fill='%2322c55e'/%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   SIMULADOR DE ESTRUCTURAS DE DATOS — CSS3 puro
+   Paleta: verde, azul oscuro, negro y tonos neutros
+   ============================================================ */
+:root{
+  --bg:#070c14;
+  --bg2:#0b1320;
+  --panel:#111c2e;
+  --panel2:#16233a;
+  --line:#223350;
+  --green:#22c55e;
+  --green2:#16a34a;
+  --green-soft:rgba(34,197,94,.14);
+  --blue:#3b82f6;
+  --blue2:#1d4ed8;
+  --blue-soft:rgba(59,130,246,.14);
+  --text:#e6edf7;
+  --muted:#93a4bd;
+  --muted2:#64748b;
+  --danger:#ef4444;
+  --warn:#f59e0b;
+  --radius:16px;
+  --mono:ui-monospace,"Cascadia Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.6;
+  background:
+    radial-gradient(1100px 480px at 85% -8%,rgba(34,197,94,.10),transparent 60%),
+    radial-gradient(900px 460px at 0% 0%,rgba(59,130,246,.12),transparent 55%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%}
+h1,h2,h3{line-height:1.25;margin:0}
+p{margin:0}
+a{color:inherit}
+.contenedor{max-width:1200px;margin:0 auto;padding:0 20px}
+
+/* ---------- Iconos ---------- */
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico-fill{fill:currentColor;stroke:none}
+
+/* ---------- Botones ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--text);
+  padding:10px 16px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;
+  cursor:pointer;transition:transform .15s,border-color .15s,background .15s,box-shadow .15s;
+  white-space:nowrap;
+}
+.btn:hover:not(:disabled){border-color:rgba(34,197,94,.55);transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.btn-verde{background:linear-gradient(135deg,var(--green),var(--green2));border-color:transparent;color:#04140a}
+.btn-verde:hover:not(:disabled){box-shadow:0 8px 22px rgba(34,197,94,.35)}
+.btn-azul{background:linear-gradient(135deg,var(--blue),var(--blue2));border-color:transparent;color:#fff}
+.btn-azul:hover:not(:disabled){box-shadow:0 8px 22px rgba(59,130,246,.35)}
+.btn-rojo{background:linear-gradient(135deg,#ef4444,#b91c1c);border-color:transparent;color:#fff}
+.btn-ghost{background:transparent}
+.btn-sm{padding:8px 12px;font-size:13px;border-radius:10px}
+.btn-lg{padding:14px 22px;font-size:15px;border-radius:14px}
+
+/* ---------- Cabecera / Hero ---------- */
+.hero{position:relative;overflow:hidden;padding:74px 0 54px;border-bottom:1px solid var(--line)}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 25%,transparent 72%);
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 25%,transparent 72%);
+}
+.hero-inner{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green);background:var(--green-soft);
+  border:1px solid rgba(34,197,94,.35);padding:7px 16px;border-radius:999px;
+}
+.hero h1{
+  font-size:clamp(30px,5.4vw,58px);font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(100deg,#fff 15%,#a7f3d0 55%,#93c5fd 95%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:640px}
+.hero-acciones{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;max-width:820px;margin-top:22px}
+.stat{background:rgba(17,28,46,.75);border:1px solid var(--line);border-radius:14px;padding:14px 10px}
+.stat b{display:block;font-size:clamp(18px,3vw,26px);color:var(--green);font-family:var(--mono)}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* ---------- Navegación ---------- */
+.navbar{position:sticky;top:0;z-index:60;background:rgba(7,12,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 20px;position:relative}
+.marca{display:flex;align-items:center;gap:9px;font-weight:800;text-decoration:none;font-size:15px;letter-spacing:.3px}
+.marca .cuadro{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:grid;place-items:center;color:#04140a;font-size:14px}
+.marca .punto{color:var(--green)}
+.nav-menu{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.nav-menu a{
+  padding:8px 13px;border-radius:10px;color:var(--muted);text-decoration:none;
+  font-size:13.5px;font-weight:600;transition:.15s;
+}
+.nav-menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.nav-menu a.activa{color:#04140a;background:var(--green)}
+.btn-menu{display:none;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--text);cursor:pointer}
+
+/* ---------- Secciones ---------- */
+.seccion{padding:64px 0 8px;scroll-margin-top:78px}
+.seccion-cab{display:flex;gap:16px;align-items:flex-start;margin-bottom:26px}
+.seccion-num{
+  flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:var(--green-soft);border:1px solid rgba(34,197,94,.4);
+  color:var(--green);font-family:var(--mono);font-weight:700;font-size:15px;
+}
+.seccion-cab h2{font-size:clamp(23px,3.4vw,33px);font-weight:750}
+.sub{color:var(--muted);margin-top:7px;max-width:78ch;font-size:15px}
+.tarjeta{
+  background:linear-gradient(165deg,var(--panel),rgba(22,35,58,.65));
+  border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+  box-shadow:0 14px 40px rgba(0,0,0,.35);
+}
+.tarjeta h3{font-size:16.5px;display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.tarjeta h3 .ico{color:var(--green)}
+.rejilla-2{display:grid;grid-template-columns:1fr 1.25fr;gap:20px;align-items:start}
+.rejilla-par{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.panel-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-family:var(--mono);font-size:12.5px;background:#0d1626;border:1px solid var(--line);padding:6px 11px;border-radius:999px;color:var(--muted)}
+.chip b{color:var(--green);font-weight:700}
+.lista-ok{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.lista-ok li{position:relative;padding-left:26px;font-size:14.5px;color:var(--muted)}
+.lista-ok li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green);font-weight:700}
+.lista-ok li b{color:var(--text);font-family:var(--mono);font-size:13.5px}
+.lista-num{margin:12px 0 0;padding-left:20px;display:grid;gap:8px;font-size:14.5px;color:var(--muted)}
+.lista-num li::marker{color:var(--green);font-weight:700}
+.nota{
+  margin-top:14px;font-size:13.5px;color:var(--muted);background:rgba(59,130,246,.08);
+  border:1px solid rgba(59,130,246,.28);border-left:3px solid var(--blue);
+  padding:11px 14px;border-radius:10px;
+}
+.nota b{color:#93c5fd}
+.aviso{
+  margin-top:14px;font-size:13.5px;color:#fde68a;background:rgba(245,158,11,.08);
+  border:1px solid rgba(245,158,11,.3);border-left:3px solid var(--warn);
+  padding:11px 14px;border-radius:10px;
+}
+
+/* ---------- Controles genéricos ---------- */
+.controles{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}
+.campo{
+  background:#0d1626;border:1px solid var(--line);color:var(--text);
+  padding:10px 13px;border-radius:12px;font-family:var(--mono);font-size:14px;
+  outline:none;transition:border-color .15s;min-width:130px;
+}
+.campo:focus{border-color:var(--green)}
+.campo::placeholder{color:#4b5b73}
+select.campo{font-family:var(--sans);cursor:pointer}
+.badges{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.badge{
+  font-family:var(--mono);font-size:13px;padding:8px 13px;border-radius:10px;
+  background:#0d1626;border:1px solid var(--line);color:var(--muted);transition:.2s;
+}
+.badge.ok{color:#86efac;border-color:rgba(34,197,94,.45);background:var(--green-soft)}
+.badge.no{color:#fca5a5;border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.1)}
+.badge.pulso{animation:pulso .55s ease}
+@keyframes pulso{0%{transform:scale(1)}40%{transform:scale(1.12);box-shadow:0 0 0 6px rgba(34,197,94,.16)}100%{transform:scale(1)}}
+.rango{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.rango input[type=range]{accent-color:var(--green);width:130px;cursor:pointer}
+.rango b{color:var(--green);min-width:44px;display:inline-block}
+
+/* ---------- Registro de operaciones ---------- */
+.log{
+  margin-top:15px;max-height:240px;overflow:auto;display:flex;flex-direction:column;gap:7px;
+  background:#0a1120;border:1px solid var(--line);border-radius:13px;padding:12px;
+}
+.log-vacio{font-size:13px;color:#4b5b73;font-style:italic}
+.log-item{
+  display:flex;gap:10px;font-size:13px;padding:8px 11px;border-radius:9px;
+  background:rgba(255,255,255,.035);border-left:3px solid var(--blue);
+  animation:aparece .28s ease;
+}
+.log-item.push,.log-item.offer{border-left-color:var(--green)}
+.log-item.pop,.log-item.poll{border-left-color:var(--warn)}
+.log-item.peek{border-left-color:var(--blue)}
+.log-item.estado{border-left-color:#a78bfa}
+.log-item.error{border-left-color:var(--danger);color:#fecaca;background:rgba(239,68,68,.08)}
+.log-hora{font-family:var(--mono);font-size:11px;color:#5f718c;flex:none}
+@keyframes aparece{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* ---------- Pila (vertical, LIFO) ---------- */
+.pila-zona{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:6px}
+.pila-etiqueta{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:var(--green);text-transform:uppercase}
+.pila-caja{
+  width:100%;max-width:340px;min-height:150px;display:flex;flex-direction:column-reverse;
+  gap:8px;padding:14px 14px 16px;
+  border:2px dashed rgba(34,197,94,.4);border-top:none;border-radius:0 0 16px 16px;
+  background:linear-gradient(180deg,rgba(34,197,94,.03),rgba(34,197,94,.08));
+}
+.pila-item{
+  position:relative;height:46px;border-radius:11px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:15px;font-weight:700;color:#04140a;
+  background:linear-gradient(135deg,#4ade80,#22c55e);
+  box-shadow:0 4px 12px rgba(34,197,94,.3);
+}
+.pila-item:nth-child(even){background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#041024;box-shadow:0 4px 12px rgba(59,130,246,.3)}
+.pila-item.nuevo{animation:entraPila .3s cubic-bezier(.2,.9,.3,1.3)}
+.pila-item.saliendo{animation:salePila .26s ease forwards}
+.pila-item.resaltado{outline:3px solid #facc15;outline-offset:2px;animation:brillo .9s ease}
+@keyframes entraPila{from{transform:translateY(-42px);opacity:0}to{transform:none;opacity:1}}
+@keyframes salePila{to{transform:translateX(78px) rotate(4deg);opacity:0}}
+@keyframes brillo{0%{box-shadow:0 0 0 0 rgba(250,204,21,.6)}100%{box-shadow:0 0 0 14px rgba(250,204,21,0)}}
+.top-tag{
+  position:absolute;right:-6px;top:-9px;font-style:normal;font-size:9.5px;font-weight:800;
+  letter-spacing:.1em;background:#facc15;color:#3b2f00;padding:2px 7px;border-radius:999px;
+  box-shadow:0 3px 8px rgba(0,0,0,.4);
+}
+.pila-base{
+  width:100%;max-width:352px;text-align:center;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.24em;color:#5f718c;border-top:3px solid var(--line);padding-top:7px;
+}
+.pila-vacia-msg{font-size:13px;color:#4b5b73;font-style:italic}
+
+/* ---------- Cola (horizontal, FIFO) ---------- */
+.cola-zona{margin-top:6px}
+.cola-lados{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.cola-lados .sale{color:var(--warn)}
+.cola-lados .entra{color:var(--green)}
+.cola-pista{
+  position:relative;height:118px;min-width:100%;overflow-x:auto;overflow-y:hidden;
+  background:linear-gradient(90deg,rgba(245,158,11,.06),rgba(34,197,94,.06));
+  border:2px solid var(--line);border-radius:14px;padding:0 12px;
+}
+.cola-item{
+  position:absolute;top:14px;width:76px;height:56px;border-radius:12px;
+  display:grid;place-items:center;font-family:var(--mono);font-size:16px;font-weight:700;
+  color:#04140a;background:linear-gradient(135deg,#4ade80,#22c55e);
+  box-shadow:0 5px 14px rgba(34,197,94,.32);transition:left .32s cubic-bezier(.4,0,.2,1);
+}
+.cola-item:nth-child(even){background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#041024;box-shadow:0 5px 14px rgba(59,130,246,.32)}
+.cola-item.entra{animation:entraCola .3s cubic-bezier(.2,.9,.3,1.25)}
+.cola-item.saliendo{animation:saleCola .3s ease forwards;pointer-events:none}
+.cola-item.resaltado{outline:3px solid #facc15;outline-offset:2px;animation:brillo .9s ease}
+@keyframes entraCola{from{transform:translateX(52px) scale(.7);opacity:0}to{transform:none;opacity:1}}
+@keyframes saleCola{to{transform:translateX(-120px) rotate(-6deg);opacity:0}}
+.marca{
+  position:absolute;top:78px;width:76px;text-align:center;font-family:var(--mono);
+  font-size:10px;letter-spacing:.08em;padding-top:5px;color:var(--muted);
+  border-top:2px dashed var(--line);transition:left .32s cubic-bezier(.4,0,.2,1);
+}
+.marca#marca-frente{color:var(--warn);border-top-color:rgba(245,158,11,.6)}
+.marca#marca-final{color:var(--green);border-top-color:rgba(34,197,94,.6)}
+.cola-vacia-msg{
+  position:absolute;inset:0;display:grid;place-items:center;font-size:13px;
+  color:#4b5b73;font-style:italic;pointer-events:none;
+}
+.cola-base{
+  display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.18em;color:#5f718c;margin-top:7px;
+}
+<style>
+/* ---------- Torre de Hanói ---------- */
+.hanoi-teoria{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}
+.hanoi-lienzo{
+  position:relative;height:320px;border-radius:14px;overflow:hidden;
+  background:
+    radial-gradient(600px 200px at 50% 120%,rgba(59,130,246,.14),transparent 70%),
+    linear-gradient(180deg,#0a1120,#0d1626);
+  border:1px solid var(--line);
+}
+.base-torre{position:absolute;bottom:34px;height:11px;background:linear-gradient(180deg,#2c3f61,#1a2842);border-radius:7px;box-shadow:0 3px 10px rgba(0,0,0,.5)}
+.palo{position:absolute;bottom:44px;width:8px;border-radius:5px;background:linear-gradient(180deg,#3b4f75,#223350);box-shadow:inset 0 0 4px rgba(255,255,255,.15)}
+.torre-nombre{
+  position:absolute;bottom:6px;font-family:var(--mono);font-size:13px;font-weight:700;
+  color:var(--muted);transform:translateX(-50%);letter-spacing:.1em;
+}
+.torre-nombre.origen{color:#93c5fd}
+.torre-nombre.destino{color:#86efac}
+.disco{
+  position:absolute;height:28px;border-radius:9px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:11.5px;font-weight:800;color:#04140a;
+  box-shadow:0 4px 12px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.5);
+  transition:top .25s ease,left .25s ease;
+}
+.hanoi-caja{display:flex;flex-direction:column;gap:14px}
+.hanoi-contadores{display:flex;flex-wrap:wrap;gap:10px}
+.contador{flex:1;min-width:130px;background:#0d1626;border:1px solid var(--line);border-radius:13px;padding:11px 14px}
+.contador span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.contador b{font-family:var(--mono);font-size:22px;color:var(--green)}
+.contador.azul b{color:#93c5fd}
+.hanoi-exp{
+  background:#0a1120;border:1px solid var(--line);border-left:3px solid var(--green);
+  border-radius:12px;padding:14px 16px;font-size:14px;color:var(--muted);min-height:96px;
+}
+.hanoi-exp b{color:var(--text)}
+.cadena{
+  margin-top:10px;font-family:var(--mono);font-size:12.5px;color:#93c5fd;
+  background:#0d1626;border:1px dashed rgba(59,130,246,.4);border-radius:10px;
+  padding:9px 12px;word-break:break-word;
+}
+.reglas{display:grid;gap:9px;margin-top:12px}
+.regla{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:11px;padding:10px 13px}
+.regla i{flex:none;width:22px;height:22px;border-radius:7px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;font-family:var(--mono)}
+.formula{
+  display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:15px;
+  background:var(--green-soft);border:1px solid rgba(34,197,94,.4);color:#86efac;
+  padding:9px 15px;border-radius:11px;margin-top:12px;
+}
+
+/* ---------- Editor de código ---------- */
+.editor-barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:13px}
+.editor-barra label{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+#editor-codigo{
+  width:100%;min-height:430px;resize:vertical;background:#05090f;color:#dbe7f7;
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  font-family:var(--mono);font-size:13.5px;line-height:1.6;tab-size:4;outline:none;
+  transition:border-color .15s;white-space:pre;overflow:auto;
+}
+#editor-codigo:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+.editor-acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+
+/* ---------- Simulación paso a paso ---------- */
+.sim-cab{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.tabs{display:flex;gap:8px;background:#0d1626;border:1px solid var(--line);padding:5px;border-radius:13px}
+.tab{
+  border:none;background:transparent;color:var(--muted);font-family:inherit;font-weight:700;
+  font-size:13.5px;padding:8px 16px;border-radius:9px;cursor:pointer;transition:.15s;
+  display:flex;align-items:center;gap:7px;
+}
+.tab:hover{color:var(--text)}
+.tab.activa{background:linear-gradient(135deg,var(--green),var(--green2));color:#04140a}
+.sim-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start}
+/* Hijos de grid con min-width:0: sin esto, las líneas de código (white-space:pre)
+   estiran la columna y en móvil aparece scroll horizontal indeseado. */
+.rejilla-2>*,.rejilla-par>*,.sim-grid>*,.hanoi-teoria>*,.pie-grid>*,.hero-stats>*{min-width:0}
+.estructura-caja,.sim-codigo-caja,.consola-caja,.tarjeta{min-width:0;max-width:100%}
+.sim-codigo-caja{background:#05090f;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.sim-codigo-cab{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:#0d1626;border-bottom:1px solid var(--line);padding:9px 14px;
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+}
+.sim-codigo-cab .puntos{display:flex;gap:6px}
+.punto{width:10px;height:10px;border-radius:50%}
+#sim-codigo{max-height:430px;overflow:auto;padding:13px 0;font-family:var(--mono);font-size:13px;line-height:1.62;max-width:100%}
+.linea{display:block;padding:1px 10px;border-left:3px solid transparent;white-space:pre;color:#c6d4e8;transition:background .2s}
+.linea i{display:inline-block;width:30px;font-style:normal;color:#44546c;user-select:none;text-align:right;padding-right:14px}
+.linea.activa{background:rgba(34,197,94,.16);border-left-color:var(--green);color:#eafff4}
+.linea.activa i{color:var(--green);font-weight:700}
+.progreso{margin-top:14px}
+.progreso-cab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:7px}
+.progreso-cab b{color:var(--green)}
+.barra{height:9px;background:#0d1626;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .35s ease;border-radius:999px}
+.sim-exp{
+  margin-top:14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.3);
+  border-left:3px solid var(--green);border-radius:12px;padding:13px 15px;font-size:14px;
+  color:var(--muted);min-height:74px;
+}
+.sim-exp b{color:var(--text)}
+.sim-exp .clave{font-family:var(--mono);color:#86efac;background:rgba(34,197,94,.14);padding:1px 7px;border-radius:6px;font-size:13px}
+
+/* Estructura gráfica de la simulación */
+.estructura-caja{background:#0a1120;border:1px solid var(--line);border-radius:14px;padding:16px;min-height:270px;display:flex;flex-direction:column}
+.estructura-titulo{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between}
+.estructura-titulo b{color:var(--green)}
+#sim-estructura{flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+#sim-estructura.es-cola{position:relative;display:block;min-height:170px;overflow-x:auto}
+#sim-estructura.es-pila{
+  display:flex;flex-direction:column-reverse;gap:7px;align-items:stretch;
+  border:2px dashed rgba(34,197,94,.35);border-top:none;border-radius:0 0 13px 13px;
+  padding:12px;justify-content:flex-start;min-height:170px;
+}
+.elem-pila{
+  height:40px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);
+  font-size:14px;font-weight:700;color:#04140a;background:linear-gradient(135deg,#4ade80,#22c55e);
+  box-shadow:0 3px 10px rgba(34,197,94,.3);position:relative;
+}
+.elem-pila:nth-child(even){background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#041024}
+.elem-cola{
+  position:absolute;top:16px;width:72px;height:52px;border-radius:11px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:15px;font-weight:700;color:#04140a;
+  background:linear-gradient(135deg,#4ade80,#22c55e);box-shadow:0 4px 12px rgba(34,197,94,.3);
+  transition:left .3s cubic-bezier(.4,0,.2,1);
+}
+.elem-cola:nth-child(even){background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#041024}
+.elem-pila.nuevo,.elem-cola.nuevo{animation:entraPila .3s cubic-bezier(.2,.9,.3,1.3)}
+.elem-pila.saliendo{animation:salePila .26s ease forwards}
+.elem-cola.saliendo{animation:saleCola .3s ease forwards;pointer-events:none}
+.elem-pila.resaltado,.elem-cola.resaltado{outline:3px solid #facc15;outline-offset:2px;animation:brillo .9s ease}
+.estructura-vacia{font-size:13px;color:#4b5b73;font-style:italic;text-align:center;padding:26px 0}
+.frente-final{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px}
+.frente-final .f{color:var(--warn)}
+.frente-final .r{color:var(--green)}
+
+/* ---------- Consola ---------- */
+.consola-caja{margin-top:18px;background:#05090f;border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.consola-barra{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,#101a2c,#0d1626);border-bottom:1px solid var(--line);padding:10px 15px;
+}
+.consola-titulo{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.consola-titulo .puntos{display:flex;gap:6px}
+.consola-titulo b{color:var(--green)}
+.consola-acciones{display:flex;gap:8px;flex-wrap:wrap}
+.consola-cuerpo{
+  padding:17px 19px;min-height:230px;max-height:360px;overflow:auto;
+  font-family:var(--mono);font-size:14.2px;line-height:1.85;color:#7ee7a8;
+  background:
+    linear-gradient(180deg,rgba(34,197,94,.045),transparent 40%),
+    repeating-linear-gradient(180deg,transparent,transparent 33px,rgba(255,255,255,.02) 33px,rgba(255,255,255,.02) 34px);
+}
+.consola-linea{white-space:pre-wrap;word-break:break-word;animation:aparece .3s ease}
+.consola-linea.vacia{color:#44546c;font-style:italic}
+.consola-pie{
+  padding:9px 15px;border-top:1px solid var(--line);background:#0a1120;
+  font-family:var(--mono);font-size:11px;color:#5f718c;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:28px;transform:translate(-50%,24px);opacity:0;
+  pointer-events:none;background:var(--panel2);border:1px solid var(--line);
+  color:var(--text);padding:13px 21px;border-radius:13px;z-index:200;
+  font-size:14px;font-weight:600;box-shadow:0 16px 40px rgba(0,0,0,.55);transition:.28s;
+  max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.ok{border-color:rgba(34,197,94,.6);background:#0f2418}
+.toast.error{border-color:rgba(239,68,68,.65);background:#2a1215}
+
+/* ---------- Pie ---------- */
+footer{margin-top:70px;border-top:1px solid var(--line);background:rgba(11,19,32,.7);padding:38px 0 30px}
+.pie-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:start}
+footer h4{font-size:15px;margin:0 0 9px}
+footer p,footer li{font-size:13.5px;color:var(--muted)}
+footer ul{margin:0;padding-left:18px;display:grid;gap:7px}
+.pie-nota{
+  margin-top:22px;padding-top:16px;border-top:1px dashed var(--line);
+  font-size:12.5px;color:#5f718c;text-align:center;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1024px){
+  .rejilla-2,.rejilla-par,.sim-grid,.hanoi-teoria,.pie-grid{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:760px){
+  .btn-menu{display:inline-flex}
+  .nav-menu{
+    display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;
+    align-items:stretch;background:#0b1320;border-bottom:1px solid var(--line);
+    padding:10px;gap:6px;box-shadow:0 18px 34px rgba(0,0,0,.5);
+  }
+  .nav-menu.abierto{display:flex}
+  .nav-menu a{padding:12px 14px;font-size:14.5px}
+  .seccion{padding-top:48px}
+  .seccion-cab{gap:12px}
+  .hero{padding-top:52px}
+  .controles .btn{flex:1 1 auto}
+  .campo{min-width:100px}
+  .consola-cuerpo{font-size:12.6px;padding:14px}
+  .hanoi-lienzo{height:280px}
+  #editor-codigo{min-height:330px;font-size:12.5px}
+}
+@media (max-width:430px){
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .badge{font-size:11.5px;padding:7px 10px}
+  .btn{padding:9px 13px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+<body>
+
+<!-- ===== Sprite de iconos SVG (inline, sin dependencias) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4.5V10h-5.5"/></symbol>
+  <symbol id="i-sig" viewBox="0 0 24 24"><path d="M6 5.5l7.5 6.5L6 18.5M18 5v14"/></symbol>
+  <symbol id="i-ant" viewBox="0 0 24 24"><path d="M18 5.5L10.5 12 18 18.5M6 5v14"/></symbol>
+  <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+  <symbol id="i-basura" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.8h6V7M6.5 7l.9 12.2h9.2L17.5 7"/></symbol>
+  <symbol id="i-descargar" viewBox="0 0 24 24"><path d="M12 4v10.5M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></symbol>
+  <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8.5h3.6L9.4 6h5.2l1.8 2.5H20v10H4z"/><circle cx="12" cy="13" r="3.2"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M5 6.5 10 12l-5 5.5M12.5 17.5H19"/></symbol>
+  <symbol id="i-codigo" viewBox="0 0 24 24"><path d="M9 7.5 4.5 12 9 16.5M15 7.5 19.5 12 15 16.5"/></symbol>
+  <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2.5 12S6.4 6.2 12 6.2 21.5 12 21.5 12 17.6 17.8 12 17.8 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.8 4.4 4.4L19 7.5"/></symbol>
+  <symbol id="i-arriba" viewBox="0 0 24 24"><path d="M12 19V5.5M6.5 11 12 5.5 17.5 11"/></symbol>
+  <symbol id="i-abajo" viewBox="0 0 24 24"><path d="M12 5v13.5M6.5 13 12 18.5 17.5 13"/></symbol>
+  <symbol id="i-libro" viewBox="0 0 24 24"><path d="M4 5.5h6a2.5 2.5 0 0 1 2 2.5v11a2 2 0 0 0-2-1.6H4zM20 5.5h-6a2.5 2.5 0 0 0-2 2.5v11a2 2 0 0 1 2-1.6h6z"/></symbol>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-descarga-html" viewBox="0 0 24 24"><path d="M12 3.5v11M7.5 10 12 14.5 16.5 10M4.5 16v3.5h15V16"/></symbol>
+</svg>
+
+<!-- ============================ CABECERA ============================ -->
+<header class="hero" id="inicio">
+  <div class="contenedor hero-inner">
+    <span class="pill">◆ Estructuras de Datos · Ingeniería de Software</span>
+    <h1>TEORÍA DE PILAS Y TEORÍA DE COLAS</h1>
+    <p class="hero-sub">Aprende estructuras de datos mediante simulaciones interactivas</p>
+    <div class="hero-acciones">
+      <a class="btn btn-verde btn-lg" href="#pilas">
+        <svg class="ico"><use href="#i-play"/></svg> Comenzar a estudiar
+      </a>
+      <button class="btn btn-azul btn-lg" id="btn-descargar-html" type="button">
+        <svg class="ico"><use href="#i-descarga-html"/></svg> DESCARGAR PROYECTO HTML
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>3</b><span>temas interactivos</span></div>
+      <div class="stat"><b>2</b><span>estructuras animadas</span></div>
+      <div class="stat"><b>2ⁿ−1</b><span>movimientos de Hanói</span></div>
+      <div class="stat"><b>0</b><span>dependencias externas</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ NAVEGACIÓN ============================ -->
+<nav class="navbar">
+  <div class="nav-inner contenedor">
+    <a class="marca" href="#inicio"><span class="cuadro">▤</span> Pilas<span class="punto">·</span>Colas</a>
+    <button class="btn-menu" id="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">
+      <svg class="ico"><use href="#i-menu"/></svg>
+    </button>
+    <div class="nav-menu" id="nav-menu">
+      <a href="#inicio">Inicio</a>
+      <a href="#pilas">Teoría de pilas</a>
+      <a href="#colas">Teoría de colas</a>
+      <a href="#hanoi">Torre de Hanói</a>
+      <a href="#editor">Editor de código</a>
+      <a href="#simulaciones">Simulaciones</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================ 01 · PILAS ============================ -->
+<section class="seccion" id="pilas">
+  <div class="contenedor">
+    <div class="seccion-cab">
+      <span class="seccion-num">01</span>
+      <div>
+        <h2>Teoría de pilas (Stack)</h2>
+        <p class="sub">Una pila es una estructura lineal de acceso restringido: todo lo que entra y sale por el <b>mismo extremo</b>, la <b>cima (top)</b>. Por eso se rige por el principio <b>LIFO</b> (Last In, First Out): el último elemento en entrar es el primero en salir.</p>
+      </div>
+    </div>
+
+    <div class="rejilla-2">
+      <!-- Tarjeta teórica -->
+      <div class="tarjeta">
+        <h3><svg class="ico"><use href="#i-libro"/></svg> ¿Qué es una pila y para qué sirve?</h3>
+        <p style="color:var(--muted);font-size:14.5px">Imagina una pila de platos: solo puedes tomar el de arriba y colocar uno nuevo encima del todo. Nadie saca un plato del medio. Así funciona <span style="color:#86efac;font-family:var(--mono)">Stack</span> en Java.</p>
+        <ul class="lista-ok">
+          <li><b>push(x)</b> — apila un elemento en la cima.</li>
+          <li><b>pop()</b> — desapila y devuelve el elemento de la cima.</li>
+          <li><b>peek()</b> — consulta la cima <i>sin</i> eliminarla.</li>
+          <li><b>isEmpty()</b> — indica si la pila está vacía.</li>
+          <li><b>size()</b> — devuelve cuántos elementos contiene.</li>
+        </ul>
+        <div class="nota"><b>Usos reales:</b> deshacer acciones (Ctrl+Z), el historial «atrás» del navegador, control de llamadas a métodos (call stack), evaluación de expresiones matemáticas y paréntesis.</div>
+        <div class="aviso"><b>Errores comunes:</b> hacer <span style="font-family:var(--mono)">pop()</span> o <span style="font-family:var(--mono)">peek()</span> sobre una pila vacía provoca <span style="font-family:var(--mono)">NoSuchElementException</span> (underflow). Este simulador lo avisa en el registro sin romperse.</div>
+      </div>
+
+      <!-- Simulador de pila -->
+      <div class="tarjeta">
+        <div class="panel-cab">
+          <h3 style="margin:0"><svg class="ico"><use href="#i-arriba"/></svg> Simulador de pila</h3>
+          <span class="chip">cima actual: <b id="pila-top">—</b></span>
+        </div>
+
+        <div class="pila-zona">
+          <div class="pila-etiqueta">▲ cima (top)</div>
+          <div class="pila-caja" id="pila-cont"><p class="pila-vacia-msg" id="pila-vacia-msg">pila vacía — haz push()</p></div>
+          <div class="pila-base">BASE · FONDO</div>
+        </div>
+
+        <div class="controles">
+          <input class="campo" id="pila-input" type="text" maxlength="8" placeholder="valor (ej. 25)" aria-label="Valor a apilar">
+          <button class="btn btn-verde" id="btn-push" type="button"><svg class="ico"><use href="#i-arriba"/></svg> PUSH</button>
+          <button class="btn btn-rojo" id="btn-pop" type="button"><svg class="ico"><use href="#i-abajo"/></svg> POP</button>
+          <button class="btn" id="btn-peek" type="button"><svg class="ico"><use href="#i-ojo"/></svg> PEEK</button>
+          <button class="btn" id="btn-isempty" type="button">isEmpty()</button>
+          <button class="btn" id="btn-size" type="button">size()</button>
+          <button class="btn btn-ghost btn-sm" id="pila-ejemplo" type="button">▶ Ejemplo 5, 10, 15, 20</button>
+        </div>
+
+        <div class="badges">
+          <span class="badge ok" id="pila-vacio">isEmpty() → true</span>
+          <span class="badge" id="pila-tam">size() → 0</span>
+        </div>
+
+        <div class="log" id="pila-log"><p class="log-vacio">El registro de operaciones aparecerá aquí…</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 · COLAS ============================ -->
+<section class="seccion" id="colas">
+  <div class="contenedor">
+    <div class="seccion-cab">
+      <span class="seccion-num">02</span>
+      <div>
+        <h2>Teoría de colas (Queue)</h2>
+        <p class="sub">Una cola es una estructura lineal con <b>dos extremos</b>: los elementos <b>entran por el final (rear)</b> y <b>salen por el frente (front)</b>. Se rige por el principio <b>FIFO</b> (First In, First Out): el primero en entrar es el primero en salir.</p>
+      </div>
+    </div>
+
+    <div class="rejilla-2">
+      <!-- Tarjeta teórica -->
+      <div class="tarjeta">
+        <h3><svg class="ico"><use href="#i-libro"/></svg> ¿Qué es una cola y para qué sirve?</h3>
+        <p style="color:var(--muted);font-size:14.5px">Piensa en una fila del supermercado: te unes al <b>final</b> y atienden desde el <b>frente</b>. Nadie salta la fila. Así funciona <span style="color:#86efac;font-family:var(--mono)">Queue</span> en Java.</p>
+        <ul class="lista-ok">
+          <li><b>offer(x)</b> — encola un elemento al final (devuelve <span style="font-family:var(--mono)">true</span> si se agregó).</li>
+          <li><b>poll()</b> — desencola y devuelve el elemento del frente.</li>
+          <li><b>peek()</b> — consulta el frente <i>sin</i> eliminarlo.</li>
+          <li><b>isEmpty()</b> — indica si la cola está vacía.</li>
+          <li><b>size()</b> — devuelve cuántos elementos contiene.</li>
+        </ul>
+        <div class="nota"><b>Usos reales:</b> colas de impresión, mensajes pendientes, buffering de videos, manejo de peticiones en servidores, recorrido BFS y turnos de atención.</div>
+        <div class="aviso"><b>Comparación visual:</b> la pila tiene <b>un solo extremo</b> (todo por la cima, LIFO); la cola tiene <b>dos extremos</b> (entrada y salida separadas, FIFO). Observa la diferencia en los simuladores.</div>
+      </div>
+
+      <!-- Simulador de cola -->
+      <div class="tarjeta">
+        <div class="panel-cab">
+          <h3 style="margin:0"><svg class="ico"><use href="#i-abajo"/></svg> Simulador de cola</h3>
+          <span class="chip">frente actual: <b id="cola-top">—</b></span>
+        </div>
+
+        <div class="cola-zona">
+          <div class="cola-lados"><span class="sale">◀ SALE (frente)</span><span class="entra">ENTRA (final) ▶</span></div>
+          <div class="cola-pista" id="cola-pista">
+            <div class="cola-vacia-msg" id="cola-vacia-msg">cola vacía — haz offer()</div>
+            <span class="marca" id="marca-frente" hidden>FRENTO</span>
+            <span class="marca" id="marca-final" hidden>FINAL</span>
+          </div>
+          <div class="cola-base"><span>FRONT · FRENTO</span><span>REAR · FINAL</span></div>
+        </div>
+
+        <div class="controles">
+          <input class="campo" id="cola-input" type="text" maxlength="8" placeholder="valor (ej. 25)" aria-label="Valor a encolar">
+          <button class="btn btn-verde" id="btn-offer" type="button"><svg class="ico"><use href="#i-abajo"/></svg> OFFER</button>
+          <button class="btn btn-rojo" id="btn-poll" type="button"><svg class="ico"><use href="#i-arriba"/></svg> POLL</button>
+          <button class="btn" id="btn-peek-q" type="button"><svg class="ico"><use href="#i-ojo"/></svg> PEEK</button>
+          <button class="btn" id="btn-isempty-q" type="button">isEmpty()</button>
+          <button class="btn" id="btn-size-q" type="button">size()</button>
+          <button class="btn btn-ghost btn-sm" id="cola-ejemplo" type="button">▶ Ejemplo 5, 10, 15, 20</button>
+        </div>
+
+        <div class="badges">
+          <span class="badge ok" id="cola-vacio">isEmpty() → true</span>
+          <span class="badge" id="cola-tam">size() → 0</span>
+        </div>
+
+        <div class="log" id="cola-log"><p class="log-vacio">El registro de operaciones aparecerá aquí…</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================ 03 · HANÓI ============================ -->
+<section class="seccion" id="hanoi">
+  <div class="contenedor">
+    <div class="seccion-cab">
+      <span class="seccion-num">03</span>
+      <div>
+        <h2>Torre de Hanói</h2>
+        <p class="sub">Un clásico problema de <b>recursividad</b>: mover una pila de discos de la torre A a la C usando B como apoyo, respetando dos reglas. La solución recursiva demuestra cómo un problema grande se reduce en subproblemas más pequeños.</p>
+      </div>
+    </div>
+
+    <div class="hanoi-teoria">
+      <!-- Teoría -->
+      <div class="tarjeta">
+        <h3><svg class="ico"><use href="#i-libro"/></svg> ¿Cómo funciona la recursión aquí?</h3>
+        <p style="color:var(--muted);font-size:14.5px">Para mover <b>n discos</b> de A a C, la función <span style="font-family:var(--mono);color:#86efac">hanoi(n, A, B, C)</span> hace tres pasos:</p>
+        <ol class="lista-num">
+          <li><b>Mover n−1 discos</b> de A a B (usando C como apoyo) — <i>llamada recursiva</i>.</li>
+          <li><b>Mover el disco n</b> (el más grande) directamente de A a C — <i>caso base / paso simple</i>.</li>
+          <li><b>Mover los n−1 discos</b> de B a C (usando A como apoyo) — <i>llamada recursiva</i>.</li>
+        </ol>
+        <div class="reglas">
+          <div class="regla"><i>1</i><span>Solo se puede mover <b>un disco a la vez</b> (siempre el de la cima de una torre).</span></div>
+          <div class="regla"><i>2</i><span>Nunca se puede colocar un <b>disco grande sobre uno pequeño</b>.</span></div>
+          <div class="regla"><i>3</i><span>Todos los discos deben trasladarse desde la <b>torre A (origen)</b> hasta la <b>torre C (destino)</b>, con B como auxiliar.</span></div>
+        </div>
+        <div class="formula">2ⁿ − 1 movimientos mínimos = <b id="formula-min">7</b></div>
+        <div class="nota"><b>¿Por qué?</b> Cada disco grande exige dos viajes de los n−1 discos pequeños (ida y vuelta), más su propio movimiento: <span style="font-family:var(--mono)">T(n) = 2·T(n−1) + 1</span>, cuya solución es <span style="font-family:var(--mono)">2ⁿ − 1</span>. Con 6 discos hacen falta 63 movimientos.</div>
+      </div>
+
+      <!-- Simulador -->
+      <div class="hanoi-caja">
+        <div class="tarjeta">
+          <div class="panel-cab" style="margin-bottom:10px">
+            <h3 style="margin:0"><svg class="ico"><use href="#i-play"/></svg> Simulador animado</h3>
+            <div class="rango">
+              <label for="hanoi-vel">velocidad</label>
+              <input type="range" id="hanoi-vel" min="0.5" max="2" step="0.25" value="1">
+              <b id="hanoi-vel-val">1.00×</b>
+            </div>
+          </div>
+
+          <div class="controles" style="margin-top:0">
+            <label class="rango" for="hanoi-discos">discos
+              <select class="campo" id="hanoi-discos" style="min-width:74px;padding:8px 10px">
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </label>
+            <button class="btn btn-verde" id="btn-h-iniciar" type="button"><svg class="ico"><use href="#i-play"/></svg> Iniciar</button>
+            <button class="btn" id="btn-h-pausa" type="button" disabled><svg class="ico"><use href="#i-pausa"/></svg> Pausar</button>
+            <button class="btn btn-azul" id="btn-h-seguir" type="button" disabled><svg class="ico"><use href="#i-play"/></svg> Continuar</button>
+            <button class="btn" id="btn-h-sig" type="button"><svg class="ico"><use href="#i-sig"/></svg> Siguiente paso</button>
+            <button class="btn" id="btn-h-ant" type="button" disabled><svg class="ico"><use href="#i-ant"/></svg> Paso anterior</button>
+            <button class="btn btn-ghost" id="btn-h-reset" type="button"><svg class="ico"><use href="#i-reset"/></svg> Reiniciar</button>
+          </div>
+
+          <div class="hanoi-lienzo" id="hanoi-lienzo" style="margin-top:15px"></div>
+
+          <div class="hanoi-contadores" style="margin-top:14px">
+            <div class="contador"><span>Movimientos</span><b id="hanoi-movs">0 / 7</b></div>
+            <div class="contador azul"><span>Mínimo (2ⁿ−1)</span><b id="hanoi-min">7</b></div>
+            <div class="contador azul"><span>Disco actual</span><b id="hanoi-disco">—</b></div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <h3 style="margin-bottom:8px"><svg class="ico"><use href="#i-terminal"/></svg> Explicación del movimiento</h3>
+          <div class="hanoi-exp" id="hanoi-exp">Selecciona la cantidad de discos y pulsa <b>Iniciar</b> (o <b>Siguiente paso</b> para avanzar de uno en uno).</div>
+          <div class="cadena" id="hanoi-cadena">Cadena de llamadas recursivas: —</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 · EDITOR ============================ -->
+<section class="seccion" id="editor">
+  <div class="contenedor">
+    <div class="seccion-cab">
+      <span class="seccion-num">04</span>
+      <div>
+        <h2>Editor de código Java</h2>
+        <p class="sub">Pega, escribe y visualiza los códigos de <b>ColaEjercicio</b> y <b>PilaEjercicio</b>. Copia el código, límpialo, descárgalo como archivo <span style="font-family:var(--mono)">.java</span> o ejecútalo en el simulador paso a paso.</p>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <div class="editor-barra">
+        <label for="editor-select">Seleccionar código:</label>
+        <select class="campo" id="editor-select">
+          <option value="cola">Código de COLAS — ColaEjercicio.java</option>
+          <option value="pila">Código de PILAS — PilaEjercicio.java</option>
+        </select>
+      </div>
+
+      <textarea id="editor-codigo" spellcheck="false" aria-label="Editor de código Java"></textarea>
+
+      <div class="editor-acciones">
+        <button class="btn btn-azul" id="btn-copiar-codigo" type="button"><svg class="ico"><use href="#i-copiar"/></svg> Copiar código</button>
+        <button class="btn" id="btn-limpiar-codigo" type="button"><svg class="ico"><use href="#i-basura"/></svg> Limpiar editor</button>
+        <button class="btn btn-verde" id="btn-ejecutar" type="button"><svg class="ico"><use href="#i-play"/></svg> Ejecutar simulación</button>
+        <button class="btn" id="btn-descargar-java" type="button"><svg class="ico"><use href="#i-descargar"/></svg> Descargar código Java</button>
+      </div>
+
+      <div class="aviso" id="editor-nota" hidden></div>
+      <div class="nota"><b>Nota honesta:</b> el navegador <b>no compila Java</b>. Al pulsar «Ejecutar simulación» la app <b>reproduce fielmente</b> el comportamiento de estas instrucciones con un simulador en JavaScript, mostrando cada línea, cada cambio de estructura y la salida real que produciría el programa.</div>
+    </div>
+  </div>
+</section>
+<!-- ============================ 05 · SIMULACIONES ============================ -->
+<section class="seccion" id="simulaciones">
+  <div class="contenedor">
+    <div class="seccion-cab">
+      <span class="seccion-num">05</span>
+      <div>
+        <h2>Simulación del código paso a paso</h2>
+        <p class="sub">Observa qué sucede durante la ejecución: la línea de código que se está ejecutando se resalta, la estructura se actualiza animada y la consola imprime la salida <b>conforme avanza</b> (no aparece todo de golpe).</p>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <div class="sim-cab">
+        <div class="tabs" role="tablist">
+          <button class="tab activa" id="sim-tab-cola" type="button" role="tab" aria-selected="true"> COLAS · ColaEjercicio</button>
+          <button class="tab" id="sim-tab-pila" type="button" role="tab" aria-selected="false"> PILAS · PilaEjercicio</button>
+        </div>
+        <span class="chip">Ejercicio en ejecución: <b id="sim-nombre">ColaEjercicio</b></span>
+      </div>
+
+      <!-- Controles de la simulación -->
+      <div class="controles" style="margin-top:0">
+        <button class="btn btn-verde" id="btn-s-iniciar" type="button"><svg class="ico"><use href="#i-play"/></svg> Iniciar</button>
+        <button class="btn" id="btn-s-pausa" type="button" disabled><svg class="ico"><use href="#i-pausa"/></svg> Pausar</button>
+        <button class="btn btn-azul" id="btn-s-seguir" type="button" disabled><svg class="ico"><use href="#i-play"/></svg> Continuar</button>
+        <button class="btn" id="btn-s-sig" type="button"><svg class="ico"><use href="#i-sig"/></svg> Siguiente paso</button>
+        <button class="btn" id="btn-s-ant" type="button" disabled><svg class="ico"><use href="#i-ant"/></svg> Paso anterior</button>
+        <button class="btn" id="btn-s-reset" type="button"><svg class="ico"><use href="#i-reset"/></svg> Reiniciar</button>
+        <span class="rango"><label for="sim-vel">velocidad</label>
+          <input type="range" id="sim-vel" min="0.5" max="2" step="0.25" value="1"><b id="sim-vel-val">1.00×</b>
+        </span>
+      </div>
+
+      <div class="sim-grid" style="margin-top:16px">
+        <!-- Código + progreso + explicación -->
+        <div>
+          <div class="sim-codigo-caja">
+            <div class="sim-codigo-cab">
+              <span class="puntos"><i class="punto" style="background:#ef4444"></i><i class="punto" style="background:#f59e0b"></i><i class="punto" style="background:#22c55e"></i></span>
+              <span id="sim-archivo">ColaEjercicio.java</span>
+              <span id="sim-linea-actual">línea —</span>
+            </div>
+            <div id="sim-codigo"></div>
+          </div>
+
+          <div class="progreso">
+            <div class="progreso-cab"><span>progreso de la simulación</span><b id="sim-progreso-txt">paso 0 / 0</b></div>
+            <div class="barra"><i id="sim-barra"></i></div>
+          </div>
+
+          <div class="sim-exp" id="sim-exp">Elige un ejercicio y pulsa <b>Iniciar</b> o <b>Siguiente paso</b> para ver la ejecución animada.</div>
+        </div>
+
+        <!-- Estructura gráfica -->
+        <div class="estructura-caja">
+          <div class="estructura-titulo"><span id="sim-estructura-nom">Cola (FIFO)</span><b id="sim-estructura-size">size() → 0</b></div>
+          <div id="sim-estructura" class="es-cola">
+            <p class="estructura-vacia" id="sim-estructura-vacia">La estructura está vacía</p>
+          </div>
+          <div class="frente-final" id="sim-frente-final" hidden><span class="f">◀ FRENTO (sale)</span><span class="r">(entra) FINAL ▶</span></div>
+        </div>
+      </div>
+
+      <!-- Consola Java -->
+      <div class="consola-caja">
+        <div class="consola-barra">
+          <div class="consola-titulo">
+            <span class="puntos"><i class="punto" style="background:#ef4444"></i><i class="punto" style="background:#f59e0b"></i><i class="punto" style="background:#22c55e"></i></span>
+            <svg class="ico" style="color:var(--green)"><use href="#i-terminal"/></svg>
+            Consola · <b id="consola-ejercicio">ColaEjercicio</b>
+          </div>
+          <div class="consola-acciones">
+            <button class="btn btn-sm" id="btn-copiar-salida" type="button"><svg class="ico"><use href="#i-copiar"/></svg> Copiar salida</button>
+            <button class="btn btn-sm btn-verde" id="btn-capturar" type="button"><svg class="ico"><use href="#i-camara"/></svg> Capturar resultado</button>
+          </div>
+        </div>
+        <div class="consola-cuerpo" id="sim-consola">
+          <div class="consola-linea vacia">— La salida aparecerá aquí conforme avance la simulación —</div>
+        </div>
+        <div class="consola-pie">
+          <span id="consola-contador">0 línea(s) de salida</span>
+          <span>Salida simulada fielmente · el navegador no compila Java</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ PIE ============================ -->
+<footer>
+  <div class="contenedor">
+    <div class="pie-grid">
+      <div>
+        <h4><svg class="ico" style="color:var(--green);vertical-align:-3px"><use href="#i-descarga-html"/></svg> Simulador de Estructuras de Datos</h4>
+        <p>Herramienta educativa de una sola página: teoría de pilas (LIFO), teoría de colas (FIFO), Torre de Hanói (recursividad), editor de código Java y simulación paso a paso con consola y captura PNG.</p>
+        <div class="hero-acciones" style="justify-content:flex-start;margin-top:14px">
+          <button class="btn btn-azul" id="btn-descargar-html-pie" type="button"><svg class="ico"><use href="#i-descarga-html"/></svg> DESCARGAR PROYECTO HTML</button>
+        </div>
+      </div>
+      <div>
+        <h4>Características técnicas</h4>
+        <ul>
+          <li>HTML5 + CSS3 + JavaScript puro (sin React, Angular ni Vue).</li>
+          <li>Un único archivo: funciona abriéndolo directamente en Chrome o Edge.</li>
+          <li>Sin CDN ni librerías externas: la captura PNG se genera con <b>Canvas 2D nativo</b> (no usa html2canvas), por eso también funciona sin internet.</li>
+          <li>Animaciones con pausa, reinicio, paso a paso y control de velocidad.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pie-nota">Material educativo · Estructuras de Datos · Ingeniería de Software — Las salidas de consola reproducen fielmente los códigos <span style="font-family:var(--mono)">ColaEjercicio</span> y <span style="font-family:var(--mono)">PilaEjercicio</span>, pero su ejecución es una simulación en JavaScript, no una compilación de Java.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   SIMULADOR DE ESTRUCTURAS DE DATOS — JavaScript puro
+   Secciones:
+     0. Utilidades y fuente del proyecto (para descargar el HTML)
+     1. Navegación
+     2. Simulador de PILA (LIFO)
+     3. Simulador de COLA (FIFO)
+     4. Torre de Hanói (recursividad)
+     5. Códigos Java y editor
+     6. Simulación paso a paso + consola + captura PNG
+   ============================================================ */
+(function () {
+'use strict';
+
+/* ------------------------------------------------------------
+   0. UTILIDADES
+   ------------------------------------------------------------ */
+var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
+function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+/** Espera que se congela mientras el usuario tiene la simulación en pausa.
+ *  Usa setTimeout (no requestAnimationFrame): Chrome suspende rAF en pestañas
+ *  no visibles y la animación quedaría bloqueada para siempre. */
+function esperaPausable(ms, enPausa) {
+  return new Promise(function (resolve) {
+    var restante = ms, ultimo = performance.now();
+    (function tick() {
+      var ahora = performance.now();
+      if (enPausa && enPausa()) { ultimo = ahora; setTimeout(tick, 30); return; }
+      restante -= (ahora - ultimo); ultimo = ahora;
+      if (restante <= 0) resolve(); else setTimeout(tick, 16);
+    })();
+  });
+}
+
+/** Copia texto al portapapeles con respaldo (navigator.clipboard → execCommand). */
+function copiarTexto(txt) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(txt).catch(function () { return copiarRespaldo(txt); });
+  }
+  return Promise.resolve(copiarRespaldo(txt));
+}
+function copiarRespaldo(txt) {
+  var ta = document.createElement('textarea');
+  ta.value = txt; ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+/** Descarga un blob como archivo. */
+function descargar(blob, nombre) {
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = nombre;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+}
+
+/** Mensaje flotante. */
+var toastTimer = null;
+function toast(msg, tipo) {
+  var t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (tipo || '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.className = 'toast'; }, 2800);
+}
+
+/** Confirma visualmente un botón: «✓ Copiado». */
+function confirmar(btn, textoOk, ms) {
+  var original = btn.innerHTML;
+  btn.innerHTML = '<svg class="ico"><use href="#i-check"/></svg> ' + textoOk;
+  btn.disabled = true;
+  setTimeout(function () { btn.innerHTML = original; btn.disabled = false; }, ms || 1600);
+}
+
+function hora() {
+  return new Date().toLocaleTimeString('es-CO', { hour12: false });
+}
+
+/* ------------------------------------------------------------
+   FUENTE DEL PROYECTO
+   Se captura el HTML original ANTES de tocar el DOM, para que el
+   botón «DESCARGAR PROYECTO HTML» regenere el archivo completo,
+   autocontenido e independiente (HTML + CSS + JS incluidos).
+   ------------------------------------------------------------ */
+var FUENTE_PROYECTO = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+function descargarProyecto() {
+  var blob = new Blob([FUENTE_PROYECTO], { type: 'text/html;charset=utf-8' });
+  descargar(blob, 'simulador_estructuras_datos.html');
+  toast('Descargando simulador_estructuras_datos.html', 'ok');
+}
+/* ------------------------------------------------------------
+   1. NAVEGACIÓN
+   ------------------------------------------------------------ */
+function initNav() {
+  var toggle = $('#nav-toggle'), menu = $('#nav-menu');
+  toggle.addEventListener('click', function () {
+    var abierto = menu.classList.toggle('abierto');
+    toggle.setAttribute('aria-expanded', String(abierto));
+  });
+  $$('#nav-menu a').forEach(function (a) {
+    a.addEventListener('click', function () { menu.classList.remove('abierto'); });
+  });
+
+  var ids = ['inicio', 'pilas', 'colas', 'hanoi', 'editor', 'simulaciones'];
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        $$('#nav-menu a').forEach(function (a) {
+          a.classList.toggle('activa', a.getAttribute('href') === '#' + e.target.id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ids.forEach(function (id) { var s = document.getElementById(id); if (s) obs.observe(s); });
+  }
+}
+
+/* ------------------------------------------------------------
+   2. SIMULADOR DE PILA (LIFO)
+   ------------------------------------------------------------ */
+var CAPACIDAD = 8;
+var pila = [];
+var pilaOcupada = false;
+
+function pilaBotones(ocupado) {
+  ['btn-push', 'btn-pop', 'btn-peek', 'btn-isempty', 'btn-size', 'pila-ejemplo']
+    .forEach(function (id) { $('#' + id).disabled = ocupado; });
+}
+
+function pilaRender(nuevo) {
+  var cont = $('#pila-cont');
+  cont.innerHTML = '';
+  if (pila.length === 0) {
+    var p = document.createElement('p');
+    p.className = 'pila-vacia-msg';
+    p.textContent = 'pila vacía — haz push()';
+    cont.appendChild(p);
+  } else {
+    pila.forEach(function (v, i) {
+      var d = document.createElement('div');
+      d.className = 'pila-item' + (nuevo && i === pila.length - 1 ? ' nuevo' : '');
+      d.textContent = v;
+      if (i === pila.length - 1) {
+        var tag = document.createElement('em');
+        tag.className = 'top-tag'; tag.textContent = 'TOP';
+        d.appendChild(tag);
+      }
+      cont.appendChild(d);
+    });
+  }
+  var vacia = pila.length === 0;
+  var bV = $('#pila-vacio');
+  bV.textContent = 'isEmpty() → ' + vacia;
+  bV.className = 'badge ' + (vacia ? 'no' : 'ok');
+  var bT = $('#pila-tam');
+  bT.textContent = 'size() → ' + pila.length;
+  bT.classList.remove('pulso'); void bT.offsetWidth; bT.classList.add('pulso');
+  $('#pila-top').textContent = vacia ? '—' : pila[pila.length - 1];
+}
+
+function pilaLog(tipo, texto) {
+  var cont = $('#pila-log');
+  var vacio = cont.querySelector('.log-vacio');
+  if (vacio) vacio.remove();
+  var div = document.createElement('div');
+  div.className = 'log-item ' + tipo;
+  var h = document.createElement('span'); h.className = 'log-hora'; h.textContent = hora();
+  var t = document.createElement('span'); t.textContent = texto;
+  div.appendChild(h); div.appendChild(t);
+  cont.prepend(div);
+  while (cont.children.length > 30) cont.removeChild(cont.lastChild);
+}
+
+function leerValor(inputSel) {
+  var v = $(inputSel).value.trim();
+  if (!v) { toast('Escribe un valor antes de operar', 'error'); return null; }
+  return v;
+}
+
+async function pushPila() {
+  if (pilaOcupada) return;
+  var v = leerValor('#pila-input');
+  if (v === null) { pilaLog('error', 'push() sin valor: se ignora la operación.'); return; }
+  if (pila.length >= CAPACIDAD) {
+    pilaLog('error', 'push(' + v + ') rechazado: pila llena (capacidad ' + CAPACIDAD + ') → StackOverflowError.');
+    toast('Pila llena: no se puede apilar', 'error'); return;
+  }
+  pilaOcupada = true; pilaBotones(true);
+  pila.push(v);
+  $('#pila-input').value = '';
+  pilaRender(true);
+  pilaLog('push', 'push(' + v + ') → el ' + v + ' se apila en la cima. size() = ' + pila.length + '.');
+  await espera(320);
+  pilaOcupada = false; pilaBotones(false);
+}
+
+async function popPila() {
+  if (pilaOcupada) return;
+  if (pila.length === 0) {
+    pilaLog('error', 'pop() sobre pila vacía → NoSuchElementException (underflow).');
+    toast('La pila está vacía: nada que desapilar', 'error'); return;
+  }
+  pilaOcupada = true; pilaBotones(true);
+  var valor = pila[pila.length - 1];
+  var cont = $('#pila-cont');
+  var ultimo = cont.lastElementChild;
+  if (ultimo) ultimo.classList.add('saliendo');
+  await espera(270);
+  pila.pop();
+  pilaRender(false);
+  pilaLog('pop', 'pop() → sale el ' + valor + ' (era la cima: LIFO, lo último en entrar sale primero). size() = ' + pila.length + '.');
+  pilaOcupada = false; pilaBotones(false);
+}
+
+async function peekPila() {
+  if (pilaOcupada) return;
+  if (pila.length === 0) {
+    pilaLog('error', 'peek() sobre pila vacía → NoSuchElementException.');
+    toast('La pila está vacía: no hay cima', 'error'); return;
+  }
+  var valor = pila[pila.length - 1];
+  var top = $('#pila-cont').lastElementChild;
+  if (top) { top.classList.add('resaltado'); setTimeout(function () { top.classList.remove('resaltado'); }, 950); }
+  pilaLog('peek', 'peek() → la cima es ' + valor + '. NO se elimina el elemento. size() = ' + pila.length + '.');
+  $('#pila-top').textContent = valor;
+}
+
+function estadoPila() {
+  var vacia = pila.length === 0;
+  pilaLog('estado', 'isEmpty() → ' + vacia + ' · size() → ' + pila.length + ' · contenido: [' + pila.join(', ') + '].');
+  var bV = $('#pila-vacio');
+  bV.classList.remove('pulso'); void bV.offsetWidth; bV.classList.add('pulso');
+}
+
+async function ejemploPila() {
+  if (pilaOcupada) return;
+  pilaOcupada = true; pilaBotones(true);
+  pila = []; pilaRender(false);
+  pilaLog('estado', 'Cargando el ejemplo del enunciado: push(5), push(10), push(15), push(20).');
+  var valores = [5, 10, 15, 20];
+  for (var i = 0; i < valores.length; i++) {
+    pila.push(valores[i]);
+    pilaRender(true);
+    pilaLog('push', 'push(' + valores[i] + ') → size() = ' + pila.length + '.');
+    await espera(420);
+  }
+  pilaLog('estado', 'Pila lista: [5, 10, 15, 20]. Ahora pulsa POP y observa que sale primero el 20 (LIFO).');
+  pilaOcupada = false; pilaBotones(false);
+}
+
+function initPilas() {
+  $('#btn-push').addEventListener('click', pushPila);
+  $('#btn-pop').addEventListener('click', popPila);
+  $('#btn-peek').addEventListener('click', peekPila);
+  $('#btn-isempty').addEventListener('click', estadoPila);
+  $('#btn-size').addEventListener('click', estadoPila);
+  $('#pila-ejemplo').addEventListener('click', ejemploPila);
+  $('#pila-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); pushPila(); }
+  });
+  pilaRender(false);
+  pilaLog('estado', 'Pila creada y vacía. Capacidad visual: ' + CAPACIDAD + ' elementos. Pulsa «Ejemplo» o escribe un valor.');
+}
+
+/* ------------------------------------------------------------
+   3. SIMULADOR DE COLA (FIFO)
+   ------------------------------------------------------------ */
+var Q_ANCHO = 76, Q_PASO = 88;
+var cola = [], colaNodos = [];
+var colaOcupada = false;
+
+function colaBotones(ocupado) {
+  ['btn-offer', 'btn-poll', 'btn-peek-q', 'btn-isempty-q', 'btn-size-q', 'cola-ejemplo']
+    .forEach(function (id) { $('#' + id).disabled = ocupado; });
+}
+
+function colaLog(tipo, texto) {
+  var cont = $('#cola-log');
+  var vacio = cont.querySelector('.log-vacio');
+  if (vacio) vacio.remove();
+  var div = document.createElement('div');
+  div.className = 'log-item ' + tipo;
+  var h = document.createElement('span'); h.className = 'log-hora'; h.textContent = hora();
+  var t = document.createElement('span'); t.textContent = texto;
+  div.appendChild(h); div.appendChild(t);
+  cont.prepend(div);
+  while (cont.children.length > 30) cont.removeChild(cont.lastChild);
+}
+
+function colaPosicionar() {
+  colaNodos.forEach(function (n, i) { n.style.left = (i * Q_PASO) + 'px'; });
+  var vacia = cola.length === 0;
+  $('#cola-vacia-msg').hidden = !vacia;
+  var mf = $('#marca-frente'), mF = $('#marca-final');
+  mf.hidden = vacia; mF.hidden = vacia;
+  if (!vacia) {
+    mf.style.left = '12px';
+    mF.style.left = (12 + (cola.length - 1) * Q_PASO) + 'px';
+  }
+  var bV = $('#cola-vacio');
+  bV.textContent = 'isEmpty() → ' + vacia;
+  bV.className = 'badge ' + (vacia ? 'no' : 'ok');
+  var bT = $('#cola-tam');
+  bT.textContent = 'size() → ' + cola.length;
+  bT.classList.remove('pulso'); void bT.offsetWidth; bT.classList.add('pulso');
+  $('#cola-top').textContent = vacia ? '—' : cola[0];
+}
+
+async function offerCola() {
+  if (colaOcupada) return;
+  var v = leerValor('#cola-input');
+  if (v === null) { colaLog('error', 'offer() sin valor: se ignora la operación.'); return; }
+  if (cola.length >= 9) {
+    colaLog('error', 'offer(' + v + ') rechazado: cola llena en la vista (9 elementos).');
+    toast('Cola llena en la visualización', 'error'); return;
+  }
+  colaOcupada = true; colaBotones(true);
+  cola.push(v);
+  $('#cola-input').value = '';
+  var n = document.createElement('div');
+  n.className = 'cola-item entra';
+  n.textContent = v;
+  n.style.left = ((cola.length - 1) * Q_PASO) + 'px';
+  $('#cola-pista').appendChild(n);
+  colaNodos.push(n);
+  colaPosicionar();
+  colaLog('offer', 'offer(' + v + ') → el ' + v + ' entra por el FINAL (rear). size() = ' + cola.length + '.');
+  await espera(330);
+  colaOcupada = false; colaBotones(false);
+}
+
+async function pollCola() {
+  if (colaOcupada) return;
+  if (cola.length === 0) {
+    colaLog('error', 'poll() sobre cola vacía → null / NoSuchElementException.');
+    toast('La cola está vacía: nada que desencolar', 'error'); return;
+  }
+  colaOcupada = true; colaBotones(true);
+  var valor = cola[0];
+  var n = colaNodos[0];
+  n.classList.add('saliendo');
+  await espera(310);
+  n.remove(); colaNodos.shift(); cola.shift();
+  colaPosicionar();
+  colaLog('poll', 'poll() → sale el ' + valor + ' por el FRENTO (era el primero en entrar: FIFO). Los demás avanzan. size() = ' + cola.length + '.');
+  colaOcupada = false; colaBotones(false);
+}
+
+async function peekCola() {
+  if (colaOcupada) return;
+  if (cola.length === 0) {
+    colaLog('error', 'peek() sobre cola vacía → null.');
+    toast('La cola está vacía: no hay frente', 'error'); return;
+  }
+  var valor = cola[0];
+  var n = colaNodos[0];
+  n.classList.add('resaltado');
+  setTimeout(function () { n.classList.remove('resaltado'); }, 950);
+  colaLog('peek', 'peek() → el frente es ' + valor + '. NO se elimina el elemento. size() = ' + cola.length + '.');
+  $('#cola-top').textContent = valor;
+}
+
+function estadoCola() {
+  var vacia = cola.length === 0;
+  colaLog('estado', 'isEmpty() → ' + vacia + ' · size() → ' + cola.length + ' · contenido: [' + cola.join(', ') + '].');
+  var bV = $('#cola-vacio');
+  bV.classList.remove('pulso'); void bV.offsetWidth; bV.classList.add('pulso');
+}
+
+async function ejemploCola() {
+  if (colaOcupada) return;
+  colaOcupada = true; colaBotones(true);
+  colaNodos.forEach(function (n) { n.remove(); });
+  cola = []; colaNodos = [];
+  colaPosicionar();
+  colaLog('estado', 'Cargando el ejemplo del enunciado: offer(5), offer(10), offer(15), offer(20).');
+  var valores = [5, 10, 15, 20];
+  for (var i = 0; i < valores.length; i++) {
+    cola.push(valores[i]);
+    var n = document.createElement('div');
+    n.className = 'cola-item entra';
+    n.textContent = valores[i];
+    n.style.left = ((cola.length - 1) * Q_PASO) + 'px';
+    $('#cola-pista').appendChild(n);
+    colaNodos.push(n);
+    colaPosicionar();
+    colaLog('offer', 'offer(' + valores[i] + ') → size() = ' + cola.length + '.');
+    await espera(430);
+  }
+  colaLog('estado', 'Cola lista: [5, 10, 15, 20]. Ahora pulsa POLL y observa que sale primero el 5 (FIFO).');
+  colaOcupada = false; colaBotones(false);
+}
+
+function initColas() {
+  $('#btn-offer').addEventListener('click', offerCola);
+  $('#btn-poll').addEventListener('click', pollCola);
+  $('#btn-peek-q').addEventListener('click', peekCola);
+  $('#btn-isempty-q').addEventListener('click', estadoCola);
+  $('#btn-size-q').addEventListener('click', estadoCola);
+  $('#cola-ejemplo').addEventListener('click', ejemploCola);
+  $('#cola-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); offerCola(); }
+  });
+  colaPosicionar();
+  colaLog('estado', 'Cola creada y vacía. Los elementos entran por el final (rear) y salen por el frente (front).');
+}
+/* ------------------------------------------------------------
+   4. TORRE DE HANÓI (recursividad)
+   ------------------------------------------------------------ */
+var NOMBRES = ['A', 'B', 'C'];
+var DISCO_ALTO = 28, MARGEN_INF = 46, LIFT_Y = 8;
+var H = {
+  n: 3, torres: [[], [], []], movs: [], idx: 0,
+  play: false, pausado: false, speed: 1, ocupado: false, version: 0,
+  anchos: [], torreX: [], baseY: 0
+};
+
+var PALETA = [
+  'linear-gradient(135deg,#86efac,#22c55e)',
+  'linear-gradient(135deg,#93c5fd,#3b82f6)',
+  'linear-gradient(135deg,#fde047,#f59e0b)',
+  'linear-gradient(135deg,#c4b5fd,#8b5cf6)',
+  'linear-gradient(135deg,#fda4af,#f43f5e)',
+  'linear-gradient(135deg,#a5f3fc,#06b6d4)'
+];
+
+/** Genera la lista de movimientos con su cadena de llamadas recursivas. */
+function generarMovimientos(n) {
+  var movs = [];
+  (function rec(k, from, to, via, pilaLlamadas) {
+    var cadena = pilaLlamadas.concat('hanoi(' + k + ', ' + NOMBRES[from] + '→' + NOMBRES[to] + ')');
+    if (k <= 0) return;
+    rec(k - 1, from, via, to, cadena);
+    movs.push({ disk: k, from: from, to: to, via: via, depth: pilaLlamadas.length + 1, cadena: cadena });
+    rec(k - 1, via, to, from, cadena);
+  })(n, 0, 2, 1, []);
+  return movs;
+}
+
+/** Ancho de un disco según su tamaño (1 = más pequeño). */
+function anchoDe(disk) {
+  var minW = 58, maxW = Math.min(168, ($('#hanoi-lienzo').clientWidth || 640) * 0.26);
+  if (H.n <= 1) return maxW;
+  return minW + ((disk - 1) / (H.n - 1)) * (maxW - minW);
+}
+function posDe(t, disk, nivel) {
+  return { left: H.torreX[t] - anchoDe(disk) / 2, top: H.baseY - (nivel + 1) * DISCO_ALTO };
+}
+
+function medirHanoi() {
+  var lienzo = $('#hanoi-lienzo');
+  var W = lienzo.clientWidth || 640;
+  var Hh = lienzo.clientHeight || 320;
+  var margen = Math.min(130, W * 0.19);
+  H.torreX = [margen, W / 2, W - margen];
+  H.baseY = Hh - MARGEN_INF;
+}
+
+function dibujarTorres() {
+  var lienzo = $('#hanoi-lienzo');
+  // IMPORTANTE: solo se eliminan los elementos de estructura (bases, palos y
+  // nombres). Nunca se usa innerHTML = '' porque eso destruiría los discos y
+  // desincronizaría el estado H.torres con el DOM al redimensionar.
+  $$('.base-torre, .palo, .torre-nombre', lienzo).forEach(function (el) { el.remove(); });
+  var maxW = anchoDe(1);
+  H.torreX.forEach(function (x, i) {
+    var base = document.createElement('div');
+    base.className = 'base-torre';
+    base.style.width = (maxW + 44) + 'px';
+    base.style.left = (x - (maxW + 44) / 2) + 'px';
+    lienzo.appendChild(base);
+
+    var palo = document.createElement('div');
+    palo.className = 'palo';
+    palo.style.height = (H.n * DISCO_ALTO + 14) + 'px';
+    palo.style.left = (x - 4) + 'px';
+    lienzo.appendChild(palo);
+
+    var nom = document.createElement('div');
+    nom.className = 'torre-nombre' + (i === 0 ? ' origen' : i === 2 ? ' destino' : '');
+    nom.style.left = x + 'px';
+    nom.textContent = 'Torre ' + NOMBRES[i] + (i === 0 ? ' (origen)' : i === 2 ? ' (destino)' : ' (aux)');
+    lienzo.appendChild(nom);
+  });
+}
+
+/** Ubica un disco (torre y nivel) según el estado H.torres actual. */
+function ubicarDisco(disk) {
+  for (var t = 0; t < 3; t++) {
+    var nivel = H.torres[t].indexOf(disk);
+    if (nivel >= 0) return { torre: t, nivel: nivel };
+  }
+  return null;
+}
+
+function crearDiscos() {
+  dibujarTorres();
+  var lienzo = $('#hanoi-lienzo');
+  $$('.disco', lienzo).forEach(function (el) { el.remove(); });
+  for (var disk = 1; disk <= H.n; disk++) {
+    var el = document.createElement('div');
+    el.className = 'disco';
+    el.dataset.disk = String(disk);
+    el.style.width = anchoDe(disk) + 'px';
+    el.style.background = PALETA[(disk - 1) % PALETA.length];
+    el.textContent = String(disk);
+    el.style.transition = 'none';
+    lienzo.appendChild(el);
+  }
+  // Posiciona cada disco según el estado actual (no solo la torre A), para que
+  // sirva también si hay que reconstruirlos a mitad de la simulación.
+  $$('.disco', lienzo).forEach(function (el) {
+    var disk = Number(el.dataset.disk);
+    var ub = ubicarDisco(disk);
+    if (!ub) return;
+    var p = posDe(ub.torre, disk, ub.nivel);
+    el.style.left = p.left + 'px';
+    el.style.top = p.top + 'px';
+  });
+  // restaurar transición tras colocar (setTimeout: rAF se suspende en pestañas ocultas)
+  setTimeout(function () {
+    $$('.disco', lienzo).forEach(function (el) { el.style.transition = ''; });
+  }, 40);
+}
+
+function reposicionarDiscos() {
+  medirHanoi();
+  // Si por cualquier motivo los discos no están en el DOM, se reconstruyen
+  // a partir del estado H.torres (nunca se pierde la simulación).
+  if ($$('#hanoi-lienzo .disco').length !== H.n) { crearDiscos(); return; }
+  dibujarTorres();
+  $$('#hanoi-lienzo .disco').forEach(function (el) {
+    el.style.transition = 'none';
+    var disk = Number(el.dataset.disk);
+    var ub = ubicarDisco(disk);
+    if (ub) {
+      var p = posDe(ub.torre, disk, ub.nivel);
+      el.style.left = p.left + 'px';
+      el.style.top = p.top + 'px';
+    }
+    (function (n) { setTimeout(function () { n.style.transition = ''; }, 40); })(el);
+  });
+}
+
+function discoEl(disk) { return $('.disco[data-disk="' + disk + '"]'); }
+
+function puedeMover(disk, destino) {
+  var arr = H.torres[destino];
+  if (arr.length === 0) return true;
+  return disk < arr[arr.length - 1];
+}
+
+/** Ejecuta (o invierte) un movimiento con animación de 3 fases. */
+async function animarMovimiento(m, invertido, version) {
+  var de = invertido ? m.to : m.from;
+  var a = invertido ? m.from : m.to;
+  var disk = m.disk;
+
+  var arrDe = H.torres[de], arrA = H.torres[a];
+  var i = arrDe.lastIndexOf(disk);
+  if (i < 0) return false;
+
+  // TODAS las comprobaciones ANTES de mutar el estado: si algo falla,
+  // H.torres queda intacto (evita estados corruptos y "reglas violadas" falsas).
+  if (!puedeMover(disk, a)) {
+    hanoiExp('<b>Regla violada:</b> no se puede colocar el disco ' + disk + ' sobre uno más pequeño.');
+    toast('Movimiento inválido bloqueado', 'error');
+    return false;
+  }
+  var el = discoEl(disk);
+  if (!el) { crearDiscos(); el = discoEl(disk); }
+  if (!el) return false;
+
+  var pOrigen = posDe(de, disk, i);
+  arrDe.splice(i, 1);
+  arrA.push(disk);
+  var pDestino = posDe(a, disk, arrA.length - 1);
+  var dur = 640 / H.speed;
+  var f = function (ms) { return esperaPausable(ms, function () { return H.pausado; }); };
+
+  el.style.transition = 'top ' + (dur * 0.3) + 'ms ease, left ' + (dur * 0.42) + 'ms ease';
+  el.style.left = pOrigen.left + 'px';
+  el.style.top = LIFT_Y + 'px';
+  await f(dur * 0.3);
+  if (version !== H.version) return false;
+  el.style.left = pDestino.left + 'px';
+  await f(dur * 0.42);
+  if (version !== H.version) return false;
+  el.style.top = pDestino.top + 'px';
+  await f(dur * 0.3);
+  if (version !== H.version) return false;
+  return true;
+}
+
+function hanoiExp(html) { $('#hanoi-exp').innerHTML = html; }
+
+function actualizarHanoiUI(m, revertido) {
+  var total = H.movs.length;
+  $('#hanoi-movs').textContent = H.idx + ' / ' + total;
+  $('#hanoi-min').textContent = String(Math.pow(2, H.n) - 1);
+  $('#formula-min').textContent = String(Math.pow(2, H.n) - 1);
+  $('#hanoi-disco').textContent = m ? ('#' + m.disk) : '—';
+
+  if (m) {
+    var txt = '<b>Movimiento ' + (revertido ? H.idx + 1 : H.idx) + ' de ' + total + ':</b> mover el <b>disco ' + m.disk +
+      '</b> de la <b>Torre ' + NOMBRES[revertido ? m.to : m.from] + '</b> a la <b>Torre ' + NOMBRES[revertido ? m.from : m.to] +
+      '</b>.<br>Se respeta la regla: solo discos de cima y nunca uno grande sobre uno pequeño.';
+    hanoiExp(txt);
+    $('#hanoi-cadena').textContent = 'Cadena de llamadas recursivas: ' + m.cadena.join('  ↳  ');
+  } else if (H.idx >= total && total > 0) {
+    hanoiExp('<b>¡Completado!</b> Los ' + H.n + ' discos llegaron a la Torre C en ' + total +
+      ' movimientos, exactamente el mínimo 2^' + H.n + ' − 1 = ' + total + '.');
+    $('#hanoi-cadena').textContent = 'Cadena de llamadas recursivas: —';
+  }
+  hanoiBotones();
+}
+
+function hanoiBotones() {
+  var fin = H.idx >= H.movs.length;
+  $('#btn-h-iniciar').disabled = H.ocupado || (H.play && !H.pausado) || fin;
+  // Pausar y Continuar NUNCA se bloquean por H.ocupado: si no, pausar a media
+  // animación dejaría Continuar/Reiniciar deshabilitados (congelamiento total).
+  $('#btn-h-pausa').disabled = !(H.play && !H.pausado);
+  $('#btn-h-seguir').disabled = !(H.play && H.pausado);
+  $('#btn-h-sig').disabled = H.ocupado || fin || (H.play && !H.pausado);
+  $('#btn-h-ant').disabled = H.ocupado || H.idx <= 0 || (H.play && !H.pausado);
+  $('#btn-h-reset').disabled = false;
+  $('#hanoi-discos').disabled = H.ocupado || H.play;
+}
+
+function hanoiInit() {
+  H.version++;
+  H.n = parseInt($('#hanoi-discos').value, 10);
+  H.movs = generarMovimientos(H.n);
+  H.idx = 0; H.play = false; H.pausado = false; H.ocupado = false;
+  H.torres = [Array.from({ length: H.n }, function (_, i) { return H.n - i; }), [], []];
+  medirHanoi();
+  crearDiscos();
+  $('#hanoi-cadena').textContent = 'Cadena de llamadas recursivas: —';
+  $('#hanoi-disco').textContent = '—';
+  hanoiExp('Selecciona la cantidad de discos y pulsa <b>Iniciar</b> (o <b>Siguiente paso</b> para avanzar de uno en uno). Se moverán los ' + H.n + ' discos de la Torre A a la Torre C.');
+  actualizarHanoiUI(null);
+}
+
+async function hanoiSiguiente() {
+  if (H.ocupado || H.idx >= H.movs.length) return false;
+  H.ocupado = true; hanoiBotones();
+  var version = H.version;
+  var m = H.movs[H.idx];
+  var ok = false;
+  try {
+    ok = await animarMovimiento(m, false, version);
+  } finally {
+    // Siempre se libera el bloqueo, incluso si la animación lanza un error.
+    H.ocupado = false;
+  }
+  if (!ok || version !== H.version) { hanoiBotones(); return false; }
+  H.idx++;
+  actualizarHanoiUI(m, false);
+  return true;
+}
+
+async function hanoiAnterior() {
+  if (H.ocupado || H.idx <= 0) return false;
+  H.ocupado = true; hanoiBotones();
+  var version = H.version;
+  H.idx--;
+  var m = H.movs[H.idx];
+  var ok = false;
+  try {
+    ok = await animarMovimiento(m, true, version);
+  } finally {
+    H.ocupado = false;
+  }
+  if (!ok || version !== H.version) { hanoiBotones(); return false; }
+  actualizarHanoiUI(m, true);
+  hanoiExp('<b>Paso anterior (deshacer):</b> el disco ' + m.disk + ' regresa de la Torre ' +
+    NOMBRES[m.to] + ' a la Torre ' + NOMBRES[m.from] + '. Movimiento ' + (H.idx + 1) + ' de ' + H.movs.length + '.');
+  return true;
+}
+
+async function bucleHanoi() {
+  while (H.play && H.idx < H.movs.length) {
+    var ok = await hanoiSiguiente();
+    if (!ok) break;
+    if (H.play && H.idx < H.movs.length) await esperaPausable(300 / H.speed, function () { return H.pausado; });
+  }
+  if (H.idx >= H.movs.length && H.version >= 0) {
+    H.play = false; H.pausado = false;
+    hanoiBotones();
+    if (H.idx >= H.movs.length) {
+      toast('Torre de Hanói completada en ' + H.movs.length + ' movimientos', 'ok');
+    }
+  }
+}
+
+function initHanoi() {
+  $('#btn-h-iniciar').addEventListener('click', function () {
+    if (H.ocupado) return;
+    if (H.idx >= H.movs.length) { toast('Ya se completó: pulsa Reiniciar', 'error'); return; }
+    H.play = true; H.pausado = false;
+    hanoiBotones();
+    hanoiExp('<b>Ejecutando…</b> Observa cómo la recursión descompone el problema: primero baja n−1 discos a la torre auxiliar, luego mueve el disco grande y al final los sube al destino.');
+    bucleHanoi();
+  });
+  $('#btn-h-pausa').addEventListener('click', function () {
+    H.pausado = true; hanoiBotones();
+    hanoiExp('<b>Pausado.</b> La animación se detiene al terminar la fase en curso. Pulsa «Continuar» para reanudar.');
+  });
+  $('#btn-h-seguir').addEventListener('click', function () {
+    H.pausado = false; hanoiBotones();
+    hanoiExp('<b>Continuando…</b>');
+  });
+  $('#btn-h-sig').addEventListener('click', function () { H.play = false; hanoiSiguiente(); });
+  $('#btn-h-ant').addEventListener('click', function () { H.play = false; H.pausado = false; hanoiAnterior(); });
+  $('#btn-h-reset').addEventListener('click', function () { hanoiInit(); toast('Simulación reiniciada'); });
+  $('#hanoi-discos').addEventListener('change', hanoiInit);
+  $('#hanoi-vel').addEventListener('input', function () {
+    H.speed = parseFloat(this.value);
+    $('#hanoi-vel-val').textContent = H.speed.toFixed(2) + '×';
+  });
+
+  medirHanoi();
+  hanoiInit();
+  var t;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(function () { if (!H.ocupado) reposicionarDiscos(); }, 160);
+  });
+}
+/* ------------------------------------------------------------
+   5. CÓDIGOS JAVA Y EDITOR
+   ------------------------------------------------------------ */
+var CODIGO_COLA = [
+  'import java.util.LinkedList;',
+  'import java.util.Queue;',
+  '',
+  '// Ejercicio de COLAS: principio FIFO (First In, First Out).',
+  'public class ColaEjercicio {',
+  '    public static void main(String[] args) {',
+  '        // 1. Crear la cola vacía',
+  '        Queue<Integer> cola = new LinkedList<>();',
+  '',
+  '        // 2. Agregar elementos por el final (offer)',
+  '        cola.offer(5);',
+  '        cola.offer(10);',
+  '        cola.offer(15);',
+  '        cola.offer(20);',
+  '        System.out.println("Cola actual: " + cola);',
+  '',
+  '        // 3. Eliminar el primer elemento (poll): sale el 5',
+  '        int desencolado = cola.poll();',
+  '        System.out.println("Elemento desencolado: " + desencolado);',
+  '        System.out.println("Cola actual: " + cola);',
+  '',
+  '        // 4. Consultar el frente sin eliminarlo (peek)',
+  '        int frente = cola.peek();',
+  '        System.out.println("Elemento en la parte frontal de la cola: " + frente);',
+  '',
+  '        // 5. Estado final de la cola',
+  '        System.out.println("La cola está vacía: " + cola.isEmpty());',
+  '        System.out.println("Tamaño de la cola: " + cola.size());',
+  '    }',
+  '}'
+];
+
+var CODIGO_PILA = [
+  'import java.util.Stack;',
+  '',
+  '// Ejercicio de PILAS: principio LIFO (Last In, First Out).',
+  'public class PilaEjercicio {',
+  '    public static void main(String[] args) {',
+  '        // 1. Crear la pila vacía',
+  '        Stack<Integer> pila = new Stack<>();',
+  '',
+  '        // 2. Agregar elementos en la cima (push)',
+  '        pila.push(5);',
+  '        pila.push(10);',
+  '        pila.push(15);',
+  '        pila.push(20);',
+  '        System.out.println("Pila actual: " + pila);',
+  '',
+  '        // 3. Eliminar el elemento superior (pop): sale el 20',
+  '        int desapilado = pila.pop();',
+  '        System.out.println("Elemento desapilado: " + desapilado);',
+  '        System.out.println("Pila actual: " + pila);',
+  '',
+  '        // 4. Consultar la cima sin eliminarla (peek)',
+  '        int cima = pila.peek();',
+  '        System.out.println("Elemento en la cima de la pila: " + cima);',
+  '',
+  '        // 5. Estado final de la pila',
+  '        System.out.println("La pila está vacía: " + pila.isEmpty());',
+  '        System.out.println("Tamaño de la pila: " + pila.size());',
+  '    }',
+  '}'
+];
+
+var EJERCICIOS = {
+  cola: {
+    nombre: 'ColaEjercicio', archivo: 'ColaEjercicio.java',
+    lineas: CODIGO_COLA, estructura: 'Cola (FIFO)',
+    salida: [
+      'Cola actual: [5, 10, 15, 20]',
+      'Elemento desencolado: 5',
+      'Cola actual: [10, 15, 20]',
+      'Elemento en la parte frontal de la cola: 10',
+      'La cola está vacía: false',
+      'Tamaño de la cola: 3'
+    ]
+  },
+  pila: {
+    nombre: 'PilaEjercicio', archivo: 'PilaEjercicio.java',
+    lineas: CODIGO_PILA, estructura: 'Pila (LIFO)',
+    salida: [
+      'Pila actual: [5, 10, 15, 20]',
+      'Elemento desapilado: 20',
+      'Pila actual: [5, 10, 15]',
+      'Elemento en la cima de la pila: 15',
+      'La pila está vacía: false',
+      'Tamaño de la pila: 3'
+    ]
+  }
+};
+
+/** Número de línea (1-based) buscando un fragmento desde una posición en adelante. */
+function sigLinea(lineas, cursor, fragmento) {
+  for (var i = cursor; i < lineas.length; i++) {
+    if (lineas[i].indexOf(fragmento) >= 0) return { n: i + 1, sig: i + 1 };
+  }
+  return { n: -1, sig: cursor };
+}
+
+/** Construye los pasos de simulación para un ejercicio (línea + acción + salida). */
+function construirPasos(ej) {
+  var L = EJERCICIOS[ej].lineas, c = 0, pasos = [];
+  function linea(f) { var r = sigLinea(L, c, f); c = r.sig; return r.n; }
+
+  if (ej === 'cola') {
+    var lCrear = linea('Queue<Integer> cola');
+    pasos.push({ tipo: 'crear', linea: lCrear, exp: 'Se crea una <span class="clave">cola vacía</span> con LinkedList. Aún no hay elementos: no hay frente ni final.' });
+    [5, 10, 15, 20].forEach(function (v) {
+      pasos.push({ tipo: 'offer', valor: v, linea: linea('cola.offer(' + v + ')'),
+        exp: '<span class="clave">cola.offer(' + v + ')</span> — el ' + v + ' entra por el <b>FINAL (rear)</b>. La cola queda [' + [5, 10, 15, 20].slice(0, [5, 10, 15, 20].indexOf(v) + 1).join(', ') + '].' });
+    });
+    pasos.push({ tipo: 'print', salida: 'Cola actual: [5, 10, 15, 20]', linea: linea('println("Cola actual'),
+      exp: '<span class="clave">System.out.println</span> imprime la cola completa: los 4 elementos, del frente al final.' });
+    pasos.push({ tipo: 'poll', linea: linea('cola.poll()'),
+      exp: '<span class="clave">cola.poll()</span> extrae por el <b>FRENTO</b>: sale el 5, que fue el primero en entrar (FIFO). Cola = [10, 15, 20].' });
+    pasos.push({ tipo: 'print', salida: 'Elemento desencolado: 5', linea: linea('println("Elemento desencolado'),
+      exp: 'Se imprime el valor devuelto por poll(): <b>5</b>.' });
+    pasos.push({ tipo: 'print', salida: 'Cola actual: [10, 15, 20]', linea: linea('println("Cola actual'),
+      exp: 'La cola ahora contiene 3 elementos: el frente es el 10.' });
+    pasos.push({ tipo: 'peek', linea: linea('cola.peek()'),
+      exp: '<span class="clave">cola.peek()</span> consulta el frente (<b>10</b>) <b>sin eliminarlo</b>: la cola sigue en [10, 15, 20].' });
+    pasos.push({ tipo: 'print', salida: 'Elemento en la parte frontal de la cola: 10', linea: linea('println("Elemento en la parte frontal'),
+      exp: 'Se imprime el frente consultado: <b>10</b>. peek() no modificó la cola.' });
+    pasos.push({ tipo: 'print', salida: 'La cola está vacía: false', linea: linea('println("La cola está vacía'),
+      exp: '<span class="clave">isEmpty()</span> devuelve <b>false</b>: aún quedan 3 elementos.' });
+    pasos.push({ tipo: 'print', salida: 'Tamaño de la cola: 3', linea: linea('println("Tamaño de la cola'),
+      exp: '<span class="clave">size()</span> devuelve <b>3</b>: cola = [10, 15, 20].' });
+  } else {
+    var lCrearP = linea('Stack<Integer> pila');
+    pasos.push({ tipo: 'crear', linea: lCrearP, exp: 'Se crea una <span class="clave">pila vacía</span> con Stack. Solo se accede por la cima (top).' });
+    [5, 10, 15, 20].forEach(function (v) {
+      pasos.push({ tipo: 'push', valor: v, linea: linea('pila.push(' + v + ')'),
+        exp: '<span class="clave">pila.push(' + v + ')</span> — el ' + v + ' se apila en la <b>cima</b>. Pila = [' + [5, 10, 15, 20].slice(0, [5, 10, 15, 20].indexOf(v) + 1).join(', ') + '].' });
+    });
+    pasos.push({ tipo: 'print', salida: 'Pila actual: [5, 10, 15, 20]', linea: linea('println("Pila actual'),
+      exp: '<span class="clave">System.out.println</span> imprime la pila completa (de abajo hacia arriba): [5, 10, 15, 20].' });
+    pasos.push({ tipo: 'pop', linea: linea('pila.pop()'),
+      exp: '<span class="clave">pila.pop()</span> desapila la <b>cima</b>: sale el 20, el último en entrar (LIFO). Pila = [5, 10, 15].' });
+    pasos.push({ tipo: 'print', salida: 'Elemento desapilado: 20', linea: linea('println("Elemento desapilado'),
+      exp: 'Se imprime el valor devuelto por pop(): <b>20</b>.' });
+    pasos.push({ tipo: 'print', salida: 'Pila actual: [5, 10, 15]', linea: linea('println("Pila actual'),
+      exp: 'La pila ahora contiene 3 elementos: la cima es el 15.' });
+    pasos.push({ tipo: 'peek', linea: linea('pila.peek()'),
+      exp: '<span class="clave">pila.peek()</span> consulta la cima (<b>15</b>) <b>sin eliminarla</b>: la pila sigue en [5, 10, 15].' });
+    pasos.push({ tipo: 'print', salida: 'Elemento en la cima de la pila: 15', linea: linea('println("Elemento en la cima'),
+      exp: 'Se imprime la cima consultada: <b>15</b>. peek() no modificó la pila.' });
+    pasos.push({ tipo: 'print', salida: 'La pila está vacía: false', linea: linea('println("La pila está vacía'),
+      exp: '<span class="clave">isEmpty()</span> devuelve <b>false</b>: aún quedan 3 elementos.' });
+    pasos.push({ tipo: 'print', salida: 'Tamaño de la pila: 3', linea: linea('println("Tamaño de la pila'),
+      exp: '<span class="clave">size()</span> devuelve <b>3</b>: pila = [5, 10, 15].' });
+  }
+  return pasos;
+}
+
+var PASOS = { cola: construirPasos('cola'), pila: construirPasos('pila') };
+
+function initEditor() {
+  var ta = $('#editor-codigo'), sel = $('#editor-select');
+
+  function cargar(ej) {
+    ta.value = EJERCICIOS[ej].lineas.join('\n');
+    $('#editor-nota').hidden = true;
+  }
+  sel.addEventListener('change', function () { cargar(sel.value); });
+  cargar('cola');
+
+  // Tab inserta 4 espacios; Escape libera el tabulador para salir del editor.
+  var liberarTab = false;
+  ta.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { liberarTab = true; return; }
+    if (e.key === 'Tab' && !liberarTab) {
+      e.preventDefault();
+      var s = ta.selectionStart, f = ta.selectionEnd;
+      ta.value = ta.value.slice(0, s) + '    ' + ta.value.slice(f);
+      ta.selectionStart = ta.selectionEnd = s + 4;
+    }
+    if (e.key !== 'Tab') liberarTab = false;
+  });
+
+  $('#btn-copiar-codigo').addEventListener('click', function () {
+    var btn = this;
+    if (!ta.value.trim()) { toast('No hay código para copiar', 'error'); return; }
+    copiarTexto(ta.value).then(function (ok) {
+      if (ok === false || ok === undefined) { toast('No se pudo acceder al portapapeles', 'error'); return; }
+      confirmar(btn, 'Código copiado');
+      toast('Código copiado al portapapeles', 'ok');
+    });
+  });
+
+  $('#btn-limpiar-codigo').addEventListener('click', function () {
+    ta.value = '';
+    ta.focus();
+    toast('Editor limpiado');
+  });
+
+  $('#btn-descargar-java').addEventListener('click', function () {
+    var ej = sel.value;
+    var blob = new Blob([ta.value || EJERCICIOS[ej].lineas.join('\n')], { type: 'text/x-java-source;charset=utf-8' });
+    descargar(blob, EJERCICIOS[ej].archivo);
+    toast('Descargando ' + EJERCICIOS[ej].archivo, 'ok');
+  });
+
+  $('#btn-ejecutar').addEventListener('click', function () {
+    var ej = sel.value;
+    var original = EJERCICIOS[ej].lineas.join('\n').trim();
+    if (ta.value.trim() !== original && ta.value.trim()) {
+      var nota = $('#editor-nota');
+      nota.hidden = false;
+      nota.innerHTML = '<b>Código modificado:</b> la simulación reproduce fielmente el código original de <span style="font-family:var(--mono)">' +
+        EJERCICIOS[ej].nombre + '</span> (el navegador no compila Java). Tus cambios se mantienen en el editor y se descargan tal cual.';
+    }
+    cambiarEjercicio(ej, true);
+    document.getElementById('simulaciones').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+/* ------------------------------------------------------------
+   6. SIMULACIÓN PASO A PASO + CONSOLA + CAPTURA PNG
+   ------------------------------------------------------------ */
+var simEj = 'cola';
+var simIdx = 0, simPlay = false, simPausado = false, simSpeed = 1;
+var simOcupado = false, simVersion = 0;
+var PASO_COLA = 84; // ancho 72 + separación 12
+
+function pasosActuales() { return PASOS[simEj]; }
+
+/* ---- Código resaltado ---- */
+function pintarCodigo() {
+  var cont = $('#sim-codigo');
+  cont.innerHTML = '';
+  EJERCICIOS[simEj].lineas.forEach(function (l, i) {
+    var span = document.createElement('span');
+    span.className = 'linea';
+    span.dataset.n = String(i + 1);
+    var num = document.createElement('i');
+    num.textContent = String(i + 1);
+    span.appendChild(num);
+    span.appendChild(document.createTextNode(l || ' '));
+    cont.appendChild(span);
+  });
+}
+
+function resaltarLinea(n) {
+  var actual = null;
+  $$('#sim-codigo .linea').forEach(function (s) {
+    var activa = Number(s.dataset.n) === n;
+    s.classList.toggle('activa', activa);
+    if (activa) actual = s;
+  });
+  $('#sim-linea-actual').textContent = n ? ('línea ' + n) : 'línea —';
+  if (actual) {
+    var cont = $('#sim-codigo');
+    var destino = actual.offsetTop - cont.clientHeight / 2 + 12;
+    cont.scrollTop = Math.max(0, destino);
+  }
+}
+
+function simExp(html) { $('#sim-exp').innerHTML = html; }
+
+function actualizarProgreso() {
+  var total = pasosActuales().length;
+  $('#sim-progreso-txt').textContent = 'paso ' + simIdx + ' / ' + total;
+  $('#sim-barra').style.width = (total ? (simIdx / total) * 100 : 0) + '%';
+}
+
+function simBotones() {
+  var fin = simIdx >= pasosActuales().length;
+  $('#btn-s-iniciar').disabled = simOcupado || (simPlay && !simPausado) || fin;
+  // Igual que en Hanói: pausa/continuar/reiniciar no se bloquean por simOcupado
+  // para evitar un congelamiento si se pausa justo al iniciar un paso.
+  $('#btn-s-pausa').disabled = !(simPlay && !simPausado);
+  $('#btn-s-seguir').disabled = !(simPlay && simPausado);
+  $('#btn-s-sig').disabled = simOcupado || fin || (simPlay && !simPausado);
+  $('#btn-s-ant').disabled = simOcupado || simIdx <= 0 || (simPlay && !simPausado);
+  $('#btn-s-reset').disabled = false;
+  $$('.tab').forEach(function (t) { t.disabled = simOcupado; });
+}
+
+/* ---- Consola ---- */
+function setConsola(lineas) {
+  var c = $('#sim-consola');
+  c.innerHTML = '';
+  if (!lineas.length) {
+    var d = document.createElement('div');
+    d.className = 'consola-linea vacia';
+    d.textContent = '— La salida aparecerá aquí conforme avance la simulación —';
+    c.appendChild(d);
+  } else {
+    lineas.forEach(function (l) {
+      var d = document.createElement('div');
+      d.className = 'consola-linea';
+      d.textContent = l;
+      c.appendChild(d);
+    });
+  }
+  c.scrollTop = c.scrollHeight;
+  $('#consola-contador').textContent = lineas.length + ' línea(s) de salida';
+}
+
+function consolaAppend(linea) {
+  var c = $('#sim-consola');
+  var placeholder = c.querySelector('.consola-linea.vacia');
+  if (placeholder) placeholder.remove();
+  var d = document.createElement('div');
+  d.className = 'consola-linea';
+  d.textContent = linea;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  var n = c.querySelectorAll('.consola-linea').length;
+  $('#consola-contador').textContent = n + ' línea(s) de salida';
+}
+
+function consolaLineas() {
+  return $$('#sim-consola .consola-linea')
+    .filter(function (d) { return !d.classList.contains('vacia'); })
+    .map(function (d) { return d.textContent; });
+}
+
+/* ---- Estructura gráfica de la simulación ---- */
+
+/** Estado exacto tras aplicar los primeros `hasta` pasos (para paso anterior). */
+function snapshot(hasta) {
+  var elems = [], consola = [], linea = null, exp = 'Pulsa <b>Iniciar</b> o <b>Siguiente paso</b>.';
+  var ps = pasosActuales();
+  for (var i = 0; i < hasta && i < ps.length; i++) {
+    var p = ps[i];
+    if (p.tipo === 'crear') elems = [];
+    else if (p.tipo === 'offer' || p.tipo === 'push') elems.push(p.valor);
+    else if (p.tipo === 'poll') elems.shift();
+    else if (p.tipo === 'pop') elems.pop();
+    if (p.salida) consola.push(p.salida);
+    linea = p.linea; exp = p.exp;
+  }
+  return { elems: elems, consola: consola, linea: linea, exp: exp };
+}
+
+function estructuraUI(elems) {
+  $('#sim-estructura-size').textContent = 'size() → ' + elems.length;
+  var cont = $('#sim-estructura');
+  var vacia = cont.querySelector('.estructura-vacia');
+  if (elems.length === 0) {
+    if (!vacia) {
+      var p = document.createElement('p');
+      p.className = 'estructura-vacia';
+      p.id = 'sim-estructura-vacia';
+      p.textContent = 'La estructura está vacía';
+      cont.appendChild(p);
+    }
+  } else if (vacia) { vacia.remove(); }
+  $('#sim-frente-final').hidden = !(simEj === 'cola' && elems.length > 0);
+}
+
+function estructuraLimpiar() {
+  var cont = $('#sim-estructura');
+  cont.innerHTML = '';
+  estructuraUI([]);
+}
+
+function nodoElem(v, animo) {
+  var esCola = simEj === 'cola';
+  var d = document.createElement('div');
+  d.className = (esCola ? 'elem-cola' : 'elem-pila') + (animo ? ' nuevo' : '');
+  d.textContent = v;
+  if (esCola) {
+    var cont = $('#sim-estructura');
+    var idx = cont.querySelectorAll('.elem-cola').length;
+    d.style.left = (idx * PASO_COLA) + 'px';
+    cont.appendChild(d);
+  } else {
+    $('#sim-estructura').appendChild(d);
+  }
+}
+
+function estructuraReposicionarCola() {
+  $$('#sim-estructura .elem-cola').forEach(function (n, i) { n.style.left = (i * PASO_COLA) + 'px'; });
+}
+
+async function estructuraQuitar() {
+  var cont = $('#sim-estructura');
+  if (simEj === 'cola') {
+    var n = cont.querySelector('.elem-cola');
+    if (!n) return;
+    n.classList.add('saliendo');
+    await espera(300);
+    n.remove();
+    estructuraReposicionarCola();
+  } else {
+    var last = cont.querySelector('.elem-pila:last-child');
+    if (!last) return;
+    last.classList.add('saliendo');
+    await espera(250);
+    last.remove();
+  }
+}
+
+function estructuraResaltar() {
+  var cont = $('#sim-estructura');
+  var el = simEj === 'cola' ? cont.querySelector('.elem-cola') : cont.querySelector('.elem-pila:last-child');
+  if (!el) return;
+  el.classList.add('resaltado');
+  setTimeout(function () { el.classList.remove('resaltado'); }, 950);
+}
+
+function estructuraRenderInstantanea(elems) {
+  var cont = $('#sim-estructura');
+  cont.innerHTML = '';
+  elems.forEach(function (v) {
+    var d = document.createElement('div');
+    d.className = simEj === 'cola' ? 'elem-cola' : 'elem-pila';
+    d.textContent = v;
+    if (simEj === 'cola') d.style.left = (Number(cont.querySelectorAll('.elem-cola').length) * PASO_COLA) + 'px';
+    cont.appendChild(d);
+  });
+  estructuraUI(elems);
+}
+
+/* ---- Navegación entre pasos ---- */
+async function simPasoAdelante() {
+  if (simOcupado || simIdx >= pasosActuales().length) return false;
+  simOcupado = true; simBotones();
+  var p = pasosActuales()[simIdx];
+
+  if (p.tipo === 'crear') estructuraLimpiar();
+  else if (p.tipo === 'offer' || p.tipo === 'push') { nodoElem(p.valor, true); estructuraUI(snapshot(simIdx + 1).elems); }
+  else if (p.tipo === 'poll' || p.tipo === 'pop') { await estructuraQuitar(); estructuraUI(snapshot(simIdx + 1).elems); }
+  else if (p.tipo === 'peek') estructuraResaltar();
+
+  if (p.salida) consolaAppend(p.salida);
+  resaltarLinea(p.linea);
+  simExp(p.exp);
+  simIdx++;
+  actualizarProgreso();
+  await espera(140);
+  simOcupado = false; simBotones();
+  return true;
+}
+
+function simIrA(hasta) {
+  var st = snapshot(hasta);
+  estructuraRenderInstantanea(st.elems);
+  setConsola(st.consola);
+  resaltarLinea(st.linea);
+  simExp(hasta === 0
+    ? 'Simulación reiniciada. Pulsa <b>Iniciar</b> o <b>Siguiente paso</b>.'
+    : st.exp);
+  simIdx = hasta;
+  actualizarProgreso();
+  simBotones();
+}
+
+async function simBucle() {
+  while (simPlay && simIdx < pasosActuales().length) {
+    var ok = await simPasoAdelante();
+    if (!ok) break;
+    if (simPlay && simIdx < pasosActuales().length) {
+      await esperaPausable(1500 / simSpeed, function () { return simPausado; });
+    }
+  }
+  if (simIdx >= pasosActuales().length) {
+    simPlay = false; simPausado = false; simBotones();
+    toast('Simulación completada: salida generada en la consola', 'ok');
+  }
+}
+
+function cambiarEjercicio(ej, silenciar) {
+  simEj = ej;
+  simVersion++;
+  simPlay = false; simPausado = false; simOcupado = false;
+
+  $('#sim-tab-cola').classList.toggle('activa', ej === 'cola');
+  $('#sim-tab-pila').classList.toggle('activa', ej === 'pila');
+  $('#sim-tab-cola').setAttribute('aria-selected', String(ej === 'cola'));
+  $('#sim-tab-pila').setAttribute('aria-selected', String(ej === 'pila'));
+  $('#editor-select').value = ej;
+  $('#sim-nombre').textContent = EJERCICIOS[ej].nombre;
+  $('#consola-ejercicio').textContent = EJERCICIOS[ej].nombre;
+  $('#sim-archivo').textContent = EJERCICIOS[ej].archivo;
+  $('#sim-estructura-nom').textContent = EJERCICIOS[ej].estructura;
+
+  var cont = $('#sim-estructura');
+  cont.className = ej === 'cola' ? 'es-cola' : 'es-pila';
+  pintarCodigo();
+  simIrA(0);
+  if (!silenciar) toast('Ejercicio cargado: ' + EJERCICIOS[ej].nombre, 'ok');
+}
+
+function initSim() {
+  $('#sim-tab-cola').addEventListener('click', function () { if (simEj !== 'cola') cambiarEjercicio('cola'); });
+  $('#sim-tab-pila').addEventListener('click', function () { if (simEj !== 'pila') cambiarEjercicio('pila'); });
+
+  $('#btn-s-iniciar').addEventListener('click', function () {
+    if (simOcupado) return;
+    if (simIdx >= pasosActuales().length) { toast('Ya se completó: pulsa Reiniciar', 'error'); return; }
+    simPlay = true; simPausado = false; simBotones();
+    simExp('<b>Ejecutando…</b> observa la línea resaltada, la estructura animada y la consola llenándose.');
+    simBucle();
+  });
+  $('#btn-s-pausa').addEventListener('click', function () {
+    simPausado = true; simBotones();
+    simExp('<b>Pausado.</b> La ejecución se detiene al terminar el paso en curso.');
+  });
+  $('#btn-s-seguir').addEventListener('click', function () { simPausado = false; simBotones(); simExp('<b>Continuando…</b>'); });
+  $('#btn-s-sig').addEventListener('click', function () { simPlay = false; simPasoAdelante().then(simBotones); });
+  $('#btn-s-ant').addEventListener('click', function () {
+    simPlay = false; simPausado = false;
+    if (simIdx > 0) simIrA(simIdx - 1);
+  });
+  $('#btn-s-reset').addEventListener('click', function () { simIrA(0); toast('Simulación reiniciada'); });
+  $('#sim-vel').addEventListener('input', function () {
+    simSpeed = parseFloat(this.value);
+    $('#sim-vel-val').textContent = simSpeed.toFixed(2) + '×';
+  });
+
+  $('#btn-copiar-salida').addEventListener('click', function () {
+    var btn = this, lineas = consolaLineas();
+    if (!lineas.length) { toast('Aún no hay salida que copiar', 'error'); return; }
+    copiarTexto(lineas.join('\n')).then(function (ok) {
+      if (ok === false) { toast('No se pudo acceder al portapapeles', 'error'); return; }
+      confirmar(btn, 'Salida copiada');
+      toast('Salida copiada al portapapeles', 'ok');
+    });
+  });
+
+  $('#btn-capturar').addEventListener('click', capturarPNG);
+
+  cambiarEjercicio('cola', true);
+}
+
+/* ---- Captura PNG de la consola (Canvas 2D nativo, sin html2canvas) ---- */
+function capturarPNG() {
+  var lineas = consolaLineas();
+  if (!lineas.length) { toast('Ejecuta la simulación antes de capturar la salida', 'error'); return; }
+
+  var nombre = EJERCICIOS[simEj].nombre;
+  var esc = 2, W = 1160, cab = 112, pie = 58, lh = 34;
+  var alto = cab + 34 + lineas.length * lh + pie;
+  var cv = document.createElement('canvas');
+  cv.width = W * esc; cv.height = alto * esc;
+  var ctx = cv.getContext('2d');
+  ctx.setTransform(esc, 0, 0, esc, 0, 0);
+
+  // Fondo
+  ctx.fillStyle = '#070c14';
+  ctx.fillRect(0, 0, W, alto);
+
+  // Cabecera
+  ctx.fillStyle = '#0d1626';
+  ctx.fillRect(0, 0, W, cab);
+  ctx.fillStyle = '#22c55e';
+  ctx.fillRect(0, 0, 7, cab);
+  ctx.fillStyle = '#e6edf7';
+  ctx.font = '700 30px Consolas, "Courier New", monospace';
+  ctx.fillText('Consola · ' + nombre, 30, 50);
+  ctx.fillStyle = '#93a4bd';
+  ctx.font = '400 16px "Segoe UI", sans-serif';
+  ctx.fillText('Ejercicio ' + nombre + ' — salida de la ejecución (simulación fiel del código Java)', 30, 80);
+  ctx.fillStyle = '#64748b';
+  ctx.font = '400 14px "Segoe UI", sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(new Date().toLocaleString('es-CO'), W - 28, 50);
+  ctx.textAlign = 'left';
+  ctx.strokeStyle = '#223350';
+  ctx.beginPath(); ctx.moveTo(0, cab + 8); ctx.lineTo(W, cab + 8); ctx.stroke();
+
+  // Líneas de salida (con tamaño ajustado si alguna es muy larga)
+  var maxSize = 20, maxW = W - 60;
+  ctx.font = maxSize + 'px Consolas, "Courier New", monospace';
+  var mayor = lineas.reduce(function (m, l) { return Math.max(m, ctx.measureText(l).width); }, 0);
+  if (mayor > maxW) maxSize = Math.max(13, Math.floor(maxSize * maxW / mayor));
+  ctx.font = maxSize + 'px Consolas, "Courier New", monospace';
+  ctx.fillStyle = '#7ee7a8';
+  lineas.forEach(function (l, i) {
+    ctx.fillText(l, 30, cab + 44 + i * lh);
+  });
+
+  // Pie
+  ctx.fillStyle = '#0d1626';
+  ctx.fillRect(0, alto - pie, W, pie);
+  ctx.fillStyle = '#5f718c';
+  ctx.font = '400 14px "Segoe UI", sans-serif';
+  ctx.fillText('Generado por el Simulador de Pilas y Colas · sin dependencias externas', 30, alto - pie / 2 + 5);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#22c55e';
+  ctx.fillText(lineas.length + ' línea(s) de salida', W - 28, alto - pie / 2 + 5);
+
+  try {
+    cv.toBlob(function (blob) {
+      if (!blob) { toast('No se pudo generar la imagen', 'error'); return; }
+      descargar(blob, 'captura_' + nombre + '.png');
+      toast('Captura PNG descargada: captura_' + nombre + '.png', 'ok');
+    }, 'image/png');
+  } catch (e) {
+    toast('No se pudo generar la imagen', 'error');
+  }
+}
+
+/* ------------------------------------------------------------
+   INICIALIZACIÓN
+   ------------------------------------------------------------ */
+function init() {
+  initNav();
+  initPilas();
+  initColas();
+  initHanoi();
+  initEditor();
+  initSim();
+  $('#btn-descargar-html').addEventListener('click', descargarProyecto);
+  $('#btn-descargar-html-pie').addEventListener('click', descargarProyecto);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+})();
+</script>
+</body>
+</html>
